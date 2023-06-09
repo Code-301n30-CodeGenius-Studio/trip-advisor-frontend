@@ -2,12 +2,19 @@ import React from 'react';
 import { Navbar, Nav, Col, Row} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './App.css'
+import logo from "./img/pngwing.com.png"
 
 class Header extends React.Component {
   render() { 
     return (
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand className='headNav'>Trip Advisor</Navbar.Brand>
+        <Navbar.Brand className='headNav'><img
+          alt=""
+          src={logo}
+          width="30"
+          height="30"
+          className='nav-logo'
+        />Trip Advisor</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
