@@ -3,9 +3,9 @@ import React from "react";
 class Footer extends React.Component{
   render(){
     return(
-    <h1>
+    <p>
     CodeGenius Studio
-    </h1>
+    </p>
     )
   }
 }

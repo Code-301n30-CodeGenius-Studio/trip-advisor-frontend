@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Sarah Mahdi",
+    "image":"https://media.licdn.com/dms/image/C4E03AQFMqmOpfAPh7Q/profile-displayphoto-shrink_400_400/0/1517078736179?e=1691625600&v=beta&t=io8ir1L8tfuEj8dD9Jw31U83M0W4mAoOv_Vsa6m21HI",
+    "title":"Software Developer",
+    "description":"Sarah is an ambitious software developer and a former member of the US Army. She has a strong background in linguistics and has worked in the healthcare industry. Sarah's expertise lies in Arabic language and culture, as she served as an Arabic Linguist/Cultural Advisor in the military, training soldiers and translating documentation between Arabic and English. She also has experience in healthcare as a Health Care Case Manager, where she assessed patients for financial assistance and facilitated medicine shipments between patients and pharmacies. Sarah resides in California and enjoys traveling, hiking, and exploring the outdoors with her spouse and two children."
+  },
+  {
+    "name": "Jonathan Brooks",
+    "image":"https://media.licdn.com/dms/image/D5635AQHfY3m4wDeT9Q/profile-framedphoto-shrink_400_400/0/1682784707832?e=1686888000&v=beta&t=N-uV7D5kX7iyfN5fkumJLNeUmq1zmPV5UN_i4zM70W8",
+    "title":"Software Developer",
+    "description":"Jonathan is a highly motivated individual with a passion for software development and a distinguished background as a US Navy Veteran. With a decade of experience as a skilled journeyman electrician, he brings a strong work ethic and technical expertise to every project he undertakes. Based in Washington, Jonathan resides with his wife, demonstrating his commitment to stability and a balanced personal life. In his leisure time, he actively engages in outdoor pursuits such as camping and hiking in the picturesque landscapes of the Pacific Northwest."
+  },
+  {
+    "name": "Zeegii Ulziibaatar",
+    "image":"https://media.licdn.com/dms/image/D5603AQHBK10ILGAiEw/profile-displayphoto-shrink_800_800/0/1675145034437?e=1690416000&v=beta&t=NZArQOa2kAtowN7D8BFlyYnIXZ3jwyRz7pSkE2B1xsU",
+    "title":"Software Developer",
+    "description":"Experienced healthcare professional with a passion for technology. Currently enrolled in a coding bootcamp, learning the ins and outs of JavaScript programming. With a strong background in healthcare and a drive to continuously learn and grow, I am eager to bring my unique skillset and perspective to a new role in the tech industry. Let's connect and explore opportunities for collaboration!"
+  }
+]
