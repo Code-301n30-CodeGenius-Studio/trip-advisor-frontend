@@ -1,0 +1,16 @@
+.national_park {
+  width: 100px;
+  height: 100px;
+}
+
+.allInfo {
+  margin-top: 30px;
+  margin-left: 50px;
+}
+
+#modalButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
