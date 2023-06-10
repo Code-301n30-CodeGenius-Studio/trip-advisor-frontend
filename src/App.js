@@ -4,6 +4,7 @@ import AboutUs from './About';
 import Header from './Header';
 import BestTrip from './BestTrip';
 import Footer from './Footer';
+import Main from './Main';
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,7 +21,10 @@ function App() {
         <Route 
           exact path="/"
           element={<BestTrip/>}></Route>
-        
+        <Route
+        exact path ="Main"
+        element={<Main/>}
+        ></Route>
         {/* PLACEHOLDER: add a route with a path of '/about' that renders the `About` component */}
         <Route
           path="About"
