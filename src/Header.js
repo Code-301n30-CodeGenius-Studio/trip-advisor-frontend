@@ -22,14 +22,12 @@ class Header extends React.Component {
             <Nav.Link as={Link} to="/" className="nav-link">Home</Nav.Link>
             </Col>
             <Col>
-            <Nav.Link as={Link} to="/main" className="nav-link">Main</Nav.Link>
+            <Nav.Link as={Link} to="/Advisor" className="nav-link">Explore</Nav.Link>
             </Col>
             <Col>
             <Nav.Link as={Link} to="/about" className="nav-link">About</Nav.Link>
             </Col>
-            {/* <Col>
-            <Nav.Link as={Link} to="/Profile" className="nav-link">Profile</Nav.Link>
-            </Col> */}
+            
             <Col>
             <Row>
             </Row>

@@ -2,6 +2,7 @@ import React from 'react'
 import './App.css';
 import AboutUs from './About';
 import Header from './Header';
+import NationalPark from './NationalPark';
 import BestTrip from './BestTrip';
 import Footer from './Footer';
 import Main from './Main';
@@ -20,20 +21,17 @@ function App() {
         
         <Route 
           exact path="/"
-          element={<BestTrip/>}></Route>
+          element={<BestTrip/>}></Route>       
+
         <Route
-        exact path ="Main"
-        element={<Main/>}
-        ></Route>
-        {/* PLACEHOLDER: add a route with a path of '/about' that renders the `About` component */}
+        path="Advisor"
+        element={<NationalPark/>}>
+
+        </Route>
         <Route
           path="About"
           element={<AboutUs/>}>
         </Route>
-
-        {/* <Route
-        path="Profile"
-        element={<User/>}></Route> */}
       </Routes>
       <Footer />
     </Router>
