@@ -5,6 +5,7 @@ import Header from './Header';
 import NationalPark from './NationalPark';
 import BestTrip from './BestTrip';
 import Footer from './Footer';
+import Main from './Main';
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,8 +21,7 @@ function App() {
         
         <Route 
           exact path="/"
-          element={<BestTrip/>}></Route>
-        
+          element={<BestTrip/>}></Route>       
 
         <Route
         path="Advisor"

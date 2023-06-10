@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css"
-import logo from "./CodeGenius Studios-logos.jpeg"
+import logo from "./img/CodeGenius-Studios-logos.jpeg"
 class BestTrip extends React.Component{
   render(){
     return(
