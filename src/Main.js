@@ -15,8 +15,10 @@ constructor(props) {
     cityName:'',
     cityLat:'',
     cityLon:'',
+    locationData: [],
     weatherData: [],
     airQualityData:[],
+    yelpData:[],
     displayError: false
   }
 }
@@ -57,25 +59,33 @@ constructor(props) {
     // }
 
   fetchLocationData = async () => {
-
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_SERVER}/locationIQ`);
+        this.setState({ locationData: res.data })
+      } catch (err) {
+        console.log(err)
+      }
   }
 
 
 
   fetchWeatherData = async () => {
-
-
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_SERVER}/weather`);
+      this.setState({ weatherData: res.data})
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   fetchYelpData = async () => {
-
-
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_SERVER}/yelp`);
+        this.setState({ yelpData: res.data})
+    } catch (err) {
+      console.log(err)
+    }
   }
-
-
-
-
-
 
     resetError = () => {
       this.setState({
