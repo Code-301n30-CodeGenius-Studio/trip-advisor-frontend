@@ -4,8 +4,6 @@ import { Button, Container, Form, } from "react-bootstrap";
 import Error from "./Error";
 import Location from "./Location";
 
-const locationData = require("./location.json")
-const weather = require("./weather.json")
 
 
 class Main extends React.Component {
@@ -17,8 +15,10 @@ constructor(props) {
     cityName:'',
     cityLat:'',
     cityLon:'',
+    locationData: [],
     weatherData: [],
     airQualityData:[],
+    yelpData:[],
     displayError: false
   }
 }
@@ -29,34 +29,63 @@ constructor(props) {
       , () => console.log(this.state.city)
       );
   }
-    handleTravel = async (e) => {
-      e.preventDefault();
-      try {
-        let url = `${this.locationData}`
-        const response = await axios.get(url)
-        console.log(response);
+    // handleTravel = async (e) => {
+    //   e.preventDefault();
+    //   try {
+    //     let url = `${this.locationData}`
+    //     const response = await axios.get(url)
+    //     console.log(response);
 
-        const lat = response.data[0].lat
-        const lon = response.data[0].lon
-        let weatherUrl = `${this.weather}`
-        const weatherResponse = await axios.get(weatherUrl)
-        let airQualityUrl = ``
-        const airQualityResponse = await axios.get(airQualityUrl)
-        this.setState({
-          displayInfo: true,
-          cityName: response.data[0].display_name,
-          cityLat: response.data[0].lat,
-          cityLon: response.data[0].lon,
-          weatherData: weatherResponse.data,
-          airQualityData: airQualityResponse.data,
-        })
+    //     const lat = response.data[0].lat
+    //     const lon = response.data[0].lon
+    //     let weatherUrl = `${this.weather}`
+    //     const weatherResponse = await axios.get(weatherUrl)
+    //     let airQualityUrl = ``
+    //     const airQualityResponse = await axios.get(airQualityUrl)
+    //     this.setState({
+    //       displayInfo: true,
+    //       cityName: response.data[0].display_name,
+    //       cityLat: response.data[0].lat,
+    //       cityLon: response.data[0].lon,
+    //       weatherData: weatherResponse.data,
+    //       airQualityData: airQualityResponse.data,
+    //     })
+    //   }
+    //   catch {
+    //     this.setState({
+    //       displayError: true
+    //     })
+    //   }
+    // }
+
+  fetchLocationData = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_SERVER}/locationIQ`);
+        this.setState({ locationData: res.data })
+      } catch (err) {
+        console.log(err)
       }
-      catch {
-        this.setState({
-          displayError: true
-        })
-      }
+  }
+
+
+
+  fetchWeatherData = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_SERVER}/weather`);
+      this.setState({ weatherData: res.data})
+    } catch (err) {
+      console.log(err)
     }
+  }
+
+  fetchYelpData = async () => {
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_SERVER}/yelp`);
+        this.setState({ yelpData: res.data})
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
     resetError = () => {
       this.setState({
@@ -77,14 +106,8 @@ render() {
         </Form>
         {this.state.displayInfo &&
         <Container>
-        
-        
+          
         <Location />
-
-
-
-
-
 
         </Container>
          }
