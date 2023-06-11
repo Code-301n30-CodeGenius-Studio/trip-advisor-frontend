@@ -2,6 +2,7 @@ import React from "react";
 import "./NationalPark.css";
 import { Button, Form, Modal } from "react-bootstrap";
 import Accordion from 'react-bootstrap/Accordion';
+import axios from "axios";
 
 // const localDataNationalData = `${process.env.REACT_APP_SERVER}/national`;
 
@@ -11,18 +12,14 @@ class NationalPark extends React.Component {
     this.state = {
       displayInfo: false,
       city: "",
-      name: "",
+      thisIsArrOfNationalPark:[],
       lon: "",
       lat: "",
-      entranceFee: "",
       image: "",
       location: {},
       errorIn: false,
       showModal: false,
-      standardHours: [],
-      exceptions: [],
-      description: "",
-      directionURL: "",
+    
     };
     this.resetStates = this.resetStates.bind(this);
   }
@@ -37,39 +34,20 @@ class NationalPark extends React.Component {
     const { city } = this.state;
     // console.log(city)
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
-    // console.log(url)
+    console.log(url)
     try {
-      const response = await fetch(url);
+      const response = await axios.get(url);
       
-      if (response.ok) {
-        const data = await response.json();
-      
-        if (data && data.length > 0) {
-          const foundCity = data[0];
           this.setState({
-            name: foundCity.name,
-            entranceFee: foundCity.entranceFee,
-            // standardHours: foundCity.operatingHours[0].standardHours,
-            // exceptions: foundCity.operatingHours[0].exceptions,
-            description: foundCity.description,
-            // directionURL: foundCity.directionsUrl,
-            // image: foundCity.images[0].url,
-            // lon: foundCity.latLong.lon,
-            // lat: foundCity.latLong.lat,
+            thisIsArrOfNationalPark:response.data,
             displayInfo: true,
             errorIn: false,
-          });
-          console.log(this.state.description);
-        } else {
-          this.setState({
-            errorIn: true,
-          });
-        }
-      } else {
-        throw new Error("Error fetching city data.");
-      }
+          }, 
+            ()=> console.log(this.state.thisIsArrOfNationalPark)
+          );
+   
     } catch (error) {
-      console.error(`Error fetching city data: ${error}`);
+      console.error(`${error}`);
       this.setState({
         errorIn: true,
       });
@@ -99,7 +77,7 @@ class NationalPark extends React.Component {
   };
 
   render() {
-    console.log(this.state.name)
+    
     return (
       <>
       <div id="modalButton">
@@ -130,32 +108,31 @@ class NationalPark extends React.Component {
 
         {this.state.displayInfo && (
           <Accordion className="allInfo">
+            {this.state.thisIsArrOfNationalPark.map((elements, idx) => (
             <Accordion.Item eventKey="0">
-            <Accordion.Header>{this.state.name}</Accordion.Header>
+            <Accordion.Header>{elements.name}</Accordion.Header>
             <Accordion.Body>
-            <p>{this.state.description}</p>
-            <a href={this.state.directionURL}>
+            <p>{elements.description}</p>
+            <a href={elements.directions}>
               Click Here to see the direction
             </a>
-            <p>
-              Entrance fee for non-commercial vehicle: {this.state.entranceFee}$
-            </p>
+           
             <img
               className="national_park"
-              alt={this.state.name}
-              src={this.state.image}
+              alt={elements.name}
+              src={elements.image}
             />
 
             <p>Standard Hours:</p>
 
             <ul>
-              {Object.entries(this.state.standardHours).map(([day, hours]) => (
+              {Object.entries(elements.workHours).map(([day, hours]) => (
                 <li key={day}>
                   {day}: {hours}
                 </li>
               ))}
             </ul>
-            <p>Exception Hours:</p>
+            {/* <p>Exception Hours:</p>
             <ul>
               {this.state.exceptions.map((exception) => (
                 <li key={exception.name}>
@@ -171,9 +148,11 @@ class NationalPark extends React.Component {
                   </ul>
                 </li>
               ))}
-            </ul>
+            </ul> */}
             </Accordion.Body>
             </Accordion.Item>
+            )
+            )}
           </Accordion>
         )}
         {this.state.errorIn && <p>Error: City not found.</p>}
