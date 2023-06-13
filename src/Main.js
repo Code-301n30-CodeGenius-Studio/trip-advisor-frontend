@@ -1,124 +1,210 @@
 import React from "react";
+import "./Main.css";
+import { Button, Container, Form, Modal } from "react-bootstrap";
 import axios from "axios";
-import { Button, Container, Form, } from "react-bootstrap";
-import Error from "./Error";
-import Location from "./Location";
+import NationalPark from "./NationalPark";
 
-
+// const localDataNationalData = `${process.env.REACT_APP_SERVER}/national`;
 
 class Main extends React.Component {
-constructor(props) {
-  super(props);
-  this.state = {
-    displayInfo: false,
-    city: '',
-    cityName:'',
-    cityLat:'',
-    cityLon:'',
-    locationData: [],
-    weatherData: [],
-    airQualityData:[],
-    yelpData:[],
-    displayError: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayInfo: false,
+      city: "",
+      thisIsArrOfNationalPark:[],
+      lon: "",
+      lat: "",
+      image: "",
+      location: {},
+      errorIn: false,
+      showModal: false,
+      locationData:[],
+      weatherData:[],
+      parkName:[]
+    };
+    this.resetStates = this.resetStates.bind(this);
   }
-}
 
+  handleInput = (event) => {
+    this.setState({
+      city: event.target.value,
+    }, () => console.log(this.state.city));
+  };
 
-  handleInput = (e) => {
-    this.setState({ city: e.target.value}
-      , () => console.log(this.state.city)
-      );
-  }
-    // handleTravel = async (e) => {
-    //   e.preventDefault();
-    //   try {
-    //     let url = `${this.locationData}`
-    //     const response = await axios.get(url)
-    //     console.log(response);
+  fetchCityData = async () => {
+    const { city } = this.state;
+    // console.log(city)
+    const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
+    console.log(url)
+    try {
+      const response = await axios.get(url);
+          this.setState({
+            parkName: response.data[0].name,
+            thisIsArrOfNationalPark:response.data,
+            displayInfo: true,
+            errorIn: false,
+          }     
+          );
+         for (let i = 0; i < this.state.thisIsArrOfNationalPark.length; i++ ) {
 
-    //     const lat = response.data[0].lat
-    //     const lon = response.data[0].lon
-    //     let weatherUrl = `${this.weather}`
-    //     const weatherResponse = await axios.get(weatherUrl)
-    //     let airQualityUrl = ``
-    //     const airQualityResponse = await axios.get(airQualityUrl)
-    //     this.setState({
-    //       displayInfo: true,
-    //       cityName: response.data[0].display_name,
-    //       cityLat: response.data[0].lat,
-    //       cityLon: response.data[0].lon,
-    //       weatherData: weatherResponse.data,
-    //       airQualityData: airQualityResponse.data,
-    //     })
-    //   }
-    //   catch {
-    //     this.setState({
-    //       displayError: true
-    //     })
-    //   }
-    // }
+         }
+    } catch (error) {
+      console.error(`${error}`);
+      this.setState({
+        errorIn: true,
+      });
+    }
+  };
+
 
   fetchLocationData = async () => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_SERVER}/locationIQ`);
-        this.setState({ locationData: res.data })
-      } catch (err) {
-        console.log(err)
-      }
-  }
-
-
-
-  fetchWeatherData = async () => {
+    const {city} = this.state;
+    // console.log(city)
+    const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
+    console.log(city)
     try {
-      const res = await axios.get(`${process.env.REACT_APP_SERVER}/weather`);
-      this.setState({ weatherData: res.data})
+      const res = await axios.get(url);
+      console.log(res);
+      this.setState({
+        lat: res.data[0].lat,
+        lon: res.data[0].lon,
+        locationData:res.data,
+        displayInfo: true,
+        errorIn: false,
+      }, 
+      () => this.fetchWeatherData()
+      );
+
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      this.setState({
+        errorIn: true,
+      },
+      );
     }
-  }
+  };
 
   fetchYelpData = async () => {
+    const {parkName} = this.state;
+    const {city} = this.state;
+    const {lat} =this.state;
+    const {lon} =this.state;
+    const url = `${process.env.REACT_APP_SERVER}/yelp/?latitude=${lat}&longitude=${lon}&term=${parkName}&location=${city}`;
+    console.log(url)
     try {
-        const res = await axios.get(`${process.env.REACT_APP_SERVER}/yelp`);
-        this.setState({ yelpData: res.data})
+      const res = await axios.get(url);
+      this.setState({
+        yelpData: res.data,
+        displayInfo: true,
+        errorIn: false,
+      }
+      );
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      this.setState({
+        errorIn: true,
+      });
+    }
+  }
+  
+  fetchWeatherData = async () => {
+    const {lat, lon} = this.state;
+    const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`;
+    console.log(url)
+    try {
+      const res = await axios.get(url);
+      this.setState({
+        weatherData: res.data,
+        displayInfo: true,
+        errorIn: false,
+    
+      },() =>
+      console.log(this.state.weatherData)
+      )
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        errorIn: true,
+      });
     }
   }
 
-    resetError = () => {
-      this.setState({
-        displayInfo: false,
-        displayError: false
-      })
-    }
 
-render() {
-  return (
-      <>
-        <Form onSubmit={this.handleTravel} className="city">
-          <Form.Group>
-            <Form.Label>Enter your Destination!</Form.Label>
-            <Form.Control type="text" onChange={this.handleInput}  />
-          </Form.Group>
-          <Button type="submit" onClick={this.resetError}>Let's Go Traveling</Button>
-        </Form>
-        {this.state.displayInfo &&
-        <Container>
-          
-        <Location />
+  handleExplore = (e) => {
+    e.preventDefault();
+    this.fetchCityData();
+    this.fetchLocationData();
+    // this.fetchYelpData();
+    this.setState({ showModal: false });
+  };
 
-        </Container>
-         }
-         {this.state.displayError &&
-         <>
-         <Error />
-         </>      
-         }
+  resetStates = () => {
+    this.setState({
+      displayInfo: false,
+      errorIn: false,
+    });
+  };
+
+  handleOpen = () => {
+    this.setState({ showModal: true });
+  };
+
+  handleClose = () => {
+    this.setState({ showModal: false });
+  };
+
+  render() {
+    return (
+      <>  
+        <div id="modalButton">
+          <Button variant="primary" onClick={this.handleOpen}>
+            National Park Finder
+          </Button>
+        </div>
+        <Modal show={this.state.showModal} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>National Park Finder</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.handleExplore}>
+              <Form.Group className="mb-3">
+                <Form.Label>Enter a city name or zipcode</Form.Label>
+                <Form.Control type="text" onChange={this.handleInput} />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={this.resetStates}
+              >
+                Explore!
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+
+      {this.state.displayInfo && (
+      <Container>
+
+        <NationalPark 
+        handleInput={this.handleInput}
+        showModal = {this.state.showModal}
+        handleOpen = {this.handleOpen}
+        handleClose={this.handleClose}
+        handleExplore={this.handleExplore}
+        resetStates={this.resetStates}
+        thisIsArrOfNationalPark={this.state.thisIsArrOfNationalPark}
+        errorIn={this.state.errorIn}
+        displayInfo={this.state.displayInfo}
+        />
+
+      </Container>  
+      
+      )}  
+     {this.state.errorIn && <p>Error: City not found.</p>}
       </>
-  )
-}
+    );
+  }
 }
 
 export default Main;
