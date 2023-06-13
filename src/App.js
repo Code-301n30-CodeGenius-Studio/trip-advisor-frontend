@@ -25,7 +25,7 @@ function App() {
 
         <Route
         path="Advisor"
-        element={<NationalPark/>}>
+        element={<Main/>}>
 
         </Route>
         <Route
