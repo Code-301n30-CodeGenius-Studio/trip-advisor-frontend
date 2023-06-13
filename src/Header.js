@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Col, Row} from 'react-bootstrap';
+import { Navbar, Nav, Col, Row, Button} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './App.css'
 import logo from "./img/pngwing.com.png"
@@ -7,7 +7,7 @@ import logo from "./img/pngwing.com.png"
 class Header extends React.Component {
   render() { 
     return (
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Navbar collapseOnSelect expand="lg" className='color-nav' bg="dark" variant="light" >
         <Navbar.Brand className='headNav'><img
           alt=""
           src={logo}
@@ -19,13 +19,13 @@ class Header extends React.Component {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <Col>
-            <Nav.Link as={Link} to="/" className="nav-link">Home</Nav.Link>
+            <Nav.Link as={Link} to="/" className="headNav">Home</Nav.Link>
             </Col>
             <Col>
-            <Nav.Link as={Link} to="/Advisor" className="nav-link">Explore</Nav.Link>
+            <Button as={Link} to="/Advisor" id="custom-btn" className="headNav">Explore</Button>
             </Col>
             <Col>
-            <Nav.Link as={Link} to="/about" className="nav-link">About</Nav.Link>
+            <Nav.Link as={Link} to="/about" className="headNav">About</Nav.Link>
             </Col>
             
             <Col>

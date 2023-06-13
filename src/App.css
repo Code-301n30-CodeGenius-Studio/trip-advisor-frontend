@@ -2,3 +2,62 @@
   height:100px;
   width: 100px;
 }
+
+.nav-logo {
+  margin-left: 20px;
+  margin-right:20px;
+}
+
+.color-nav {
+  background-color: #6EBE4A !important;;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+}
+
+.headNav {
+  color: aliceblue;
+  margin-left:20px;
+}
+
+#custom-btn {
+  background: #00BCEB;
+  color: #005072;
+  border: 2px solid #005072;
+  border-radius: 3px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+
+.home_h1 {
+  text-align: center;
+  margin-top: 60px;
+  font-family: 'Homemade Apple', cursive;
+  font-weight: bolder;
+  color: #005072;
+}
+
+.custom-background {
+  background-image: url("./img/yosemite.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.image {
+  border-radius: 30%;
+  width: 400px;
+  height:500px
+}
+
+.title {
+  text-align: center;
+  margin-top: 20px;
+  font-family: 'Homemade Apple', cursive;
+  font-weight: bolder;
+  color: #005072;
+}
+
+#cardOne {
+  margin-top: 60px;
+  margin-left: 50px;
+  display: "flex"; 
+}
