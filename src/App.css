@@ -56,8 +56,37 @@
   color: #005072;
 }
 
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 70px;
+}
+
+.card {
+  display:"flex";
+}
+
 #cardOne {
   margin-top: 60px;
   margin-left: 50px;
   display: "flex"; 
+}
+
+#cardTwo {
+  display:"flex";
+}
+
+.footer {
+  height: 40px;
+  background-color: #00BCEB;
+  position: sticky;
+  bottom: 0;
+}
+
+.footer_text {
+  text-align: center;
+  padding-top: 10px;
+  font-family:'Courier New', Courier, monospace;
+  font-weight: bolder;
+  color: white;
 }
