@@ -3,6 +3,8 @@ import "./Main.css";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import NationalPark from "./NationalPark";
+import Weather from "./Weather"
+
 
 // const localDataNationalData = `${process.env.REACT_APP_SERVER}/national`;
 class Main extends React.Component {
@@ -20,7 +22,7 @@ class Main extends React.Component {
       showModal: false,
       locationData: [],
       weatherData: [],
-      parkName: []
+      yelpData: [],
     };
     this.resetStates = this.resetStates.bind(this);
   }
@@ -33,7 +35,6 @@ class Main extends React.Component {
 
   fetchCityData = async () => {
     const { city } = this.state;
-    // console.log(city)
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
     console.log(url)
     try {
@@ -58,7 +59,6 @@ class Main extends React.Component {
 
 fetchLocationData = async () => {
   const { city } = this.state;
-  // console.log(city)
   const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
   console.log(city)
   try {
@@ -96,10 +96,10 @@ fetchYelpData = async () => {
     });
 
     const responses = await Promise.all(requests);
-    const yelpData = responses.map((res) => res.data);
+    const yelpReview = responses.map((res) => res.data);
 
     this.setState({
-      yelpData: yelpData,
+      yelpData: yelpReview,
       displayInfo: true,
       errorIn: false,
     }, () => console.log(this.state.yelpData));
@@ -166,7 +166,6 @@ handleExplore = (e) => {
   e.preventDefault();
   this.fetchCityData();
   this.fetchLocationData();
-  // this.fetchYelpData();
   this.setState({ showModal: false });
 };
 
@@ -217,6 +216,11 @@ render() {
       {this.state.displayInfo && (
         <Container>
 
+          <Weather 
+          weatherData = {this.state.weatherData}
+          Icons={this.Icons} 
+          />
+
           <NationalPark
             handleInput={this.handleInput}
             showModal={this.state.showModal}
@@ -227,7 +231,9 @@ render() {
             thisIsArrOfNationalPark={this.state.thisIsArrOfNationalPark}
             errorIn={this.state.errorIn}
             displayInfo={this.state.displayInfo}
+            yelpData={this.state.yelpData}
           />
+
 
         </Container>
 

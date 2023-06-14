@@ -3,37 +3,48 @@ import Accordion from 'react-bootstrap/Accordion';
 
 
 class NationalPark extends React.Component {
-
+  renderYelpData(yelpData) {
+    return (
+      <div>
+        <p>Rating: {this.props.yelpData.rating}</p>
+        <p>Text: {this.props.yelpData.text}</p>
+      </div>
+    );
+  }
   render() {
     return (
       <div>
 
         {this.props.displayInfo && (
-          <Accordion className="allInfo">
+          <Accordion className="allInfo" defaultActiveKey='0'>
             {this.props.thisIsArrOfNationalPark.map((elements, idx) => (
-              <Accordion.Item eventKey="0" key={idx}>
+              <Accordion.Item eventKey={idx} key={idx}>
                 <Accordion.Header>{elements.name}</Accordion.Header>
                 <Accordion.Body>
-                  <p>{elements.description}</p>
-                  <a href={elements.directions}>
-                    Click Here to see the direction
-                  </a>
+                  <div>
+                    <p>{elements.description}</p>
+                    <a href={elements.directions}>
+                      Click Here to see the direction
+                    </a>
 
-                  <img
-                    className="national_park"
-                    alt={elements.name}
-                    src={elements.image}
-                  />
+                    <img
+                      className="national_park"
+                      alt={elements.name}
+                      src={elements.image}
+                    />
 
-                  <p>Standard Hours:</p>
+                    <p>Standard Hours:</p>
 
-                  <ul>
-                    {Object.entries(elements.workHours).map(([day, hours]) => (
-                      <li key={day}>
-                        {day}: {hours}
-                      </li>
-                    ))}
-                  </ul>
+                    <ul>
+                      {Object.entries(elements.workHours).map(([day, hours]) => (
+                        <li key={day}>
+                          {day}: {hours}
+                        </li>
+                      ))}
+                    </ul>
+                    {this.renderYelpData(this.props.yelpData[idx])}
+                  </div>
+
                   {/* <p>Exception Hours:</p>
             <ul>
               {this.state.exceptions.map((exception) => (
