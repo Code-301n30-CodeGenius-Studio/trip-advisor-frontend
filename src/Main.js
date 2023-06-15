@@ -30,13 +30,15 @@ class Main extends React.Component {
   handleInput = (event) => {
     this.setState({
       city: event.target.value,
-    }, () => console.log(this.state.city));
+    },
+    //  () => console.log(this.state.city)
+    );
   };
 
   fetchCityData = async () => {
     const { city } = this.state;
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
-    console.log(url)
+    // console.log(url)
     try {
       const response = await axios.get(url);
       this.setState({
@@ -45,6 +47,7 @@ class Main extends React.Component {
         displayInfo: true,
         errorIn: false,
       }, () => this.fetchYelpData()
+
       );
 
     
@@ -60,10 +63,10 @@ class Main extends React.Component {
 fetchLocationData = async () => {
   const { city } = this.state;
   const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
-  console.log(city)
+  // console.log(city)
   try {
     const res = await axios.get(url);
-    console.log(res);
+    // console.log(res);
     this.setState({
       lat: res.data[0].lat,
       lon: res.data[0].lon,
@@ -102,7 +105,9 @@ fetchYelpData = async () => {
       yelpData: yelpReview,
       displayInfo: true,
       errorIn: false,
-    }, () => console.log(this.state.yelpData));
+    }, 
+    // () => console.log(this.state.yelpData)
+    );
   } catch (err) {
     console.log(err);
     this.setState({
@@ -142,7 +147,7 @@ fetchYelpData = async () => {
 fetchWeatherData = async () => {
   const { lat, lon } = this.state;
   const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`;
-  console.log(url)
+  // console.log(url)
   try {
     const res = await axios.get(url);
     this.setState({
@@ -150,8 +155,8 @@ fetchWeatherData = async () => {
       displayInfo: true,
       errorIn: false,
 
-    }, () =>
-      console.log(this.state.weatherData)
+    }, 
+    // () => console.log(this.state.weatherData)
     )
   } catch (err) {
     console.log(err);

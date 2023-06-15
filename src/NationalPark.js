@@ -4,12 +4,14 @@ import Accordion from 'react-bootstrap/Accordion';
 
 class NationalPark extends React.Component {
   renderYelpData(yelpData) {
-    return (
-      <div>
-        <p>Rating: {this.props.yelpData.rating}</p>
-        <p>Text: {this.props.yelpData.text}</p>
+    // console.log(yelpData);
+    return yelpData.map((review, idx) => 
+      
+      <div key={idx}>
+        <p>Rating: {review.rating}</p>
+        <p>Text: {review.text}</p>
       </div>
-    );
+      )
   }
   render() {
     return (
@@ -43,7 +45,8 @@ class NationalPark extends React.Component {
                         </li>
                       ))}
                     </ul>
-                    {this.renderYelpData(this.props.yelpData[idx])}
+                    <p>Yelp Reviews:</p>
+                    {this.props.yelpData.length > 0 && this.renderYelpData(this.props.yelpData[idx])}
                   </div>
 
                   {/* <p>Exception Hours:</p>
