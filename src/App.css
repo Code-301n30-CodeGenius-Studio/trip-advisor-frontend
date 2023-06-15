@@ -90,3 +90,23 @@
   font-weight: bolder;
   color: white;
 }
+
+.authButton {
+  margin-left: 200px;
+}
+
+.userInfo {
+  width: 50px;
+  display: flex;
+  padding-left: 160px;
+  margin-left: 200px;
+}
+
+.userImg {
+  height: 40px;
+}
+
+.userName {
+  padding-left: 10px;
+  color: aliceblue;
+}

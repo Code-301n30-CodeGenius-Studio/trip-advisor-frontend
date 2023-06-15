@@ -5,7 +5,8 @@ import './App.css'
 import logo from "./img/pngwing.com.png"
 import { withAuth0 } from '@auth0/auth0-react';
 import AuthButtons from './AuthButtons';
-
+import User
+ from './User';
 class Header extends React.Component {
   render() { 
     return (
@@ -29,10 +30,13 @@ class Header extends React.Component {
             <Col>
             <Nav.Link as={Link} to="/about" className="headNav">About</Nav.Link>
             </Col>
+            <User/>
             
             <Col>
             <Row>
-            <AuthButtons/>
+            <div className="authButton">
+            <AuthButtons />
+            </div>
             </Row>
             </Col>
           </Nav>

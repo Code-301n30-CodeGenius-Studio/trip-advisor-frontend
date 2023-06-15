@@ -1,5 +1,6 @@
 import React from "react";
 import { withAuth0 } from "@auth0/auth0-react";
+import "./App.css";
 
 class User extends React.Component {
     render() {
@@ -7,10 +8,10 @@ class User extends React.Component {
         console.log(this.props.auth0);
         return (
             isAuthenticated && (
-      < div >
-        <img src={user.picture} alt={user.name} />
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
+      < div className="userInfo" >
+        <img className="userImg" src={user.picture} alt={user.name} />
+        <p className="userName">{user.name}</p>
+        {/* <p className="userEmail">{user.email}</p> */}
       </div >
         )
       );
