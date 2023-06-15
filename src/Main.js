@@ -105,107 +105,124 @@ class Main extends React.Component {
 
   fetchCityData = async () => {
     const { city } = this.state;
-    // console.log(city)
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
-    console.log(url)
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        };
+        return axios.get(url, config);
+      })
+      .then(response => {
+        this.setState({
+          parkName: response.data.length > 0 ? response.data[0].name : "",
+          thisIsArrOfNationalPark: response.data,
+          displayInfo: true,
+          errorIn: false,
+        }, () => this.fetchYelpData());
+        
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({
+          errorIn: true,
+        });
+      });
+  };
+  
+
+
+  fetchLocationData = async () => {
+    const { city } = this.state;
+    const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        };
+        return axios.get(url, config);
+      })
+      .then(res => {
+        console.log(res);
+        this.setState({
+          lat: res.data[0].lat,
+          lon: res.data[0].lon,
+          locationData: res.data,
+          displayInfo: true,
+          errorIn: false,
+        }, () => this.fetchWeatherData());
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          errorIn: true,
+        });
+      });
+  };
+  
+
+
+
+
+  fetchYelpData = async () => {
+    const { thisIsArrOfNationalPark, city, lat, lon } = this.state;
     try {
-      const response = await axios.get(url);
+      const requests = thisIsArrOfNationalPark.map((park) => {
+        const name = park.name;
+        const url = `${process.env.REACT_APP_SERVER}/yelp/?latitude=${lat}&longitude=${lon}&term=${name}&location=${city}`;
+        return this.getJwt()
+          .then(jwt => {
+            const config = {
+              headers: { 'Authorization': `Bearer ${jwt}` }
+            };
+            return axios.get(url, config);
+          });
+      });
+  
+      const responses = await Promise.all(requests);
+      const yelpData = responses.map((res) => res.data);
+  
       this.setState({
-        parkName: response.data[0].name,
-        thisIsArrOfNationalPark: response.data,
+        yelpData: yelpData,
         displayInfo: true,
         errorIn: false,
-      }, () => this.fetchYelpData()
-      );
-
-    
-    } catch(error) {
-    console.error(`${error}`);
-    this.setState({
-      errorIn: true,
-    });
-  }
-};
-
-
-fetchLocationData = async () => {
-  const { city } = this.state;
-  // console.log(city)
-  const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
-  console.log(city)
-  try {
-    const res = await axios.get(url);
-    console.log(res);
-    this.setState({
-      lat: res.data[0].lat,
-      lon: res.data[0].lon,
-      locationData: res.data,
-      displayInfo: true,
-      errorIn: false,
-    },
-      () => this.fetchWeatherData()
-    );
-
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      errorIn: true,
-    },
-    );
-  }
-};
+      }, () => console.log(this.state.yelpData));
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        errorIn: true,
+      });
+    }
+  };
+  
 
 
 
-
-fetchYelpData = async () => {
-  const { thisIsArrOfNationalPark, city, lat, lon } = this.state;
-  try {
-    const requests = thisIsArrOfNationalPark.map((park) => {
-      const name = park.name;
-      const url = `${process.env.REACT_APP_SERVER}/yelp/?latitude=${lat}&longitude=${lon}&term=${name}&location=${city}`;
-      return axios.get(url);
-    });
-
-    const responses = await Promise.all(requests);
-    const yelpData = responses.map((res) => res.data);
-
-    this.setState({
-      yelpData: yelpData,
-      displayInfo: true,
-      errorIn: false,
-    }, () => console.log(this.state.yelpData));
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      errorIn: true,
-    });
-  }
-};
-
-
-
-fetchWeatherData = async () => {
-  const { lat, lon } = this.state;
-  const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`;
-  console.log(url)
-  try {
-    const res = await axios.get(url);
-    this.setState({
-      weatherData: res.data,
-      displayInfo: true,
-      errorIn: false,
-
-    }, () =>
-      console.log(this.state.weatherData)
-    )
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      errorIn: true,
-    });
-  }
-}
+  fetchWeatherData = async () => {
+    const { lat, lon } = this.state;
+    const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`;
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        };
+        return axios.get(url, config);
+      })
+      .then(res => {
+        this.setState({
+          weatherData: res.data,
+          displayInfo: true,
+          errorIn: false,
+        }, () => console.log(this.state.weatherData));
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          errorIn: true,
+        });
+      });
+  };
+  
 
 
 handleExplore = (e) => {

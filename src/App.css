@@ -90,6 +90,28 @@
   font-family: 'Courier New', Courier, monospace;
   font-weight: bolder;
   color: white;
+}
+
+.authButton {
+  margin-left: 200px;
+}
+
+.userInfo {
+  width: 50px;
+  display: flex;
+  padding-left: 160px;
+  margin-left: 200px;
+}
+
+.userImg {
+  height: 40px;
+}
+
+.userName {
+  padding-left: 10px;
+  color: aliceblue;
+}
+
   margin-bottom: 5px;
 }
 
@@ -108,3 +130,4 @@
 .social_icons a:hover {
   color: rgb(41, 3, 3);
 }
+
