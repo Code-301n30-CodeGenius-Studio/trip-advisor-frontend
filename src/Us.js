@@ -1,5 +1,4 @@
 import React from "react";
-// import { Component } from "react";
 import { Card, Button, Col } from "react-bootstrap";
 
 class Us extends React.Component {
@@ -21,7 +20,8 @@ class Us extends React.Component {
       <Col>
       
         <Card style={{ width: "20 rem" }}>
-          <Card.Img variant="top" src={this.props.image} />
+          <Card.Img variant="top" src={this.props.image}
+            style={{ maxWidth: "100%", height: "400px" }}/>
           <Card.Body>
             <Card.Title>{this.props.name}</Card.Title>
              <strong> {this.props.title} </strong>

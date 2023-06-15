@@ -56,8 +56,78 @@
   color: #005072;
 }
 
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 70px;
+}
+
+.card {
+  display:"flex";
+}
+
 #cardOne {
   margin-top: 60px;
   margin-left: 50px;
   display: "flex"; 
 }
+
+#cardTwo {
+  display:"flex";
+}
+
+.footer {
+  height: 45px;
+  background-color: #00BCEB;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer_text {
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+  color: white;
+}
+
+.authButton {
+  margin-left: 200px;
+}
+
+.userInfo {
+  width: 50px;
+  display: flex;
+  padding-left: 160px;
+  margin-left: 200px;
+}
+
+.userImg {
+  height: 40px;
+}
+
+.userName {
+  padding-left: 10px;
+  color: aliceblue;
+}
+
+  margin-bottom: 5px;
+}
+
+.social_icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social_icons a {
+  margin: 0 5px;
+  color: rgb(41, 3, 3);
+  font-size: 20px;
+}
+
+.social_icons a:hover {
+  color: rgb(41, 3, 3);
+}
+

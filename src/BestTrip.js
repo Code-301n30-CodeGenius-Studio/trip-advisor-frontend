@@ -1,8 +1,9 @@
 import React from "react";
 import "./App.css";
-import {Card, Col} from "react-bootstrap"
+import {Card} from "react-bootstrap"
 import background from "./img/yosemite.jpg";
-import kalisa from "./img/kalisa.jpg"
+import kalisa from "./img/kalisa.jpg";
+import kurt from "./img/kurt.jpg";
 
 class BestTrip extends React.Component {
   render() {
@@ -10,8 +11,8 @@ class BestTrip extends React.Component {
       <>
         <h1 className="home_h1">Welcome Travelers!</h1>
 
-        <Col>
-        <div id="cardOne">
+        <div className="card-container">
+        
         <Card  style={{ width: "400px", height:"600px", borderRadius: "30%" }}>
           <Card.Img className="image" variant="top" src={background} />
           <Card.Body>
@@ -21,8 +22,8 @@ class BestTrip extends React.Component {
             </Card.Text>
           </Card.Body>
         </Card>
-        </div>
-        <div id="cardTwo">
+      
+       
         <Card  style={{ width: "400px", height:"600px", borderRadius: "30%" }}>
           <Card.Img className="image" variant="top" src={kalisa} />
           <Card.Body>
@@ -32,8 +33,20 @@ class BestTrip extends React.Component {
             </Card.Text>
           </Card.Body>
         </Card>
-        </div>
-        </Col>
+     
+
+       
+        <Card  style={{ width: "400px", height:"600px", borderRadius: "30%" }}>
+          <Card.Img className="image" variant="top" src={kurt} />
+          <Card.Body>
+            <Card.Title className="title">We will Plan it for you</Card.Title>
+            <Card.Text>
+              
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </div>
+       
        
       </>
     );
