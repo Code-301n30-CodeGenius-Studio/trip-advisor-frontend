@@ -110,28 +110,6 @@ class Main extends React.Component {
   fetchCityData = async () => {
     const { city } = this.state;
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
-    // console.log(url)
-    try {
-      const response = await axios.get(url);
-      this.setState({
-        parkName: response.data[0].name,
-        thisIsArrOfNationalPark: response.data,
-        displayInfo: true,
-        errorIn: false,
-      }, () => this.fetchYelpData()
-
-      );
-
-    
-    } catch(error) {
-    console.error(`${error}`);
-    this.setState({
-      errorIn: true,
-    });
-  }
-};
-
-
     this.getJwt()
       .then(jwt => {
         const config = {
@@ -155,9 +133,6 @@ class Main extends React.Component {
         });
       });
   };
-  
-
-
 
   fetchLocationData = async () => {
     const { city } = this.state;
