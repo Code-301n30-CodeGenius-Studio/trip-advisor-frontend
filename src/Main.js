@@ -123,7 +123,9 @@ class Main extends React.Component {
           thisIsArrOfNationalPark: response.data,
           displayInfo: true,
           errorIn: false,
-        }, () => this.fetchYelpData());
+        }
+        , () => this.fetchYelpData()
+        );
         
       })
       .catch(error => {
@@ -152,7 +154,9 @@ class Main extends React.Component {
           locationData: res.data,
           displayInfo: true,
           errorIn: false,
-        }, () => this.fetchWeatherData());
+        }
+        // , () => this.fetchWeatherData()
+        );
       })
       .catch(err => {
         console.log(err);
@@ -166,6 +170,7 @@ class Main extends React.Component {
 
   fetchYelpData = async () => {
     const { thisIsArrOfNationalPark, city, lat, lon } = this.state;
+    console.log(`this yelp ${this.state}`);
     try {
       const requests = thisIsArrOfNationalPark.map((park) => {
         const name = park.name;
@@ -175,11 +180,16 @@ class Main extends React.Component {
             const config = {
               headers: { 'Authorization': `Bearer ${jwt}` }
             };
-            return axios.get(url, config);
+            const token=axios.get(url, config);
+            console.log('token', token)
+            return token
+            
+            // return axios.get(url, config);
           });
       });
   
       const responses = await Promise.all(requests);
+      console.log('yelp responses:', responses)
       const yelpData = responses.map((res) => res.data);
   
       if (yelpData.every(Array.isArray)) {

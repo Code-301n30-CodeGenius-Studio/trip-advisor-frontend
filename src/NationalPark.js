@@ -4,12 +4,15 @@ import './App.css'
 
 class NationalPark extends React.Component {
   renderYelpData(yelpData) {
-    // console.log(yelpData);
+    if (!yelpData) {
+      return <p>No Yelp reviews available</p>;
+    }
+    
     return yelpData.map((review, idx) => 
       
       <div key={idx}>
-        <p>Rating: {review.rating}</p>
-        <p>Text: {review.text}</p>
+        <p>Rating: {review.rating || "No ratings available"}</p>
+        <p>Text: {review.text || ""}</p>
       </div>
       )
   }
