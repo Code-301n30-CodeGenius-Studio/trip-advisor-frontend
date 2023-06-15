@@ -1,3 +1,8 @@
+body {
+background-color:seashell;
+}
+
+
 .logo {
   height:100px;
   width: 100px;
@@ -83,6 +88,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  top: 30px;
 }
 
 .footer_text {
@@ -112,8 +118,6 @@
   color: aliceblue;
 }
 
-  margin-bottom: 5px;
-}
 
 .social_icons {
   display: flex;
@@ -129,5 +133,19 @@
 
 .social_icons a:hover {
   color: rgb(41, 3, 3);
+}
+
+
+.about-us-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h2 {
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  text-align: center;
+
 }
 

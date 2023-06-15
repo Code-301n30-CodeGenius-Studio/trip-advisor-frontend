@@ -22,7 +22,7 @@ class AboutUs extends Component {
   
       return(
         <>
-        <h2>About Us</h2>
+        <h2>About Our Team</h2>
       <Container>
       <Row> {students}
       </Row>
