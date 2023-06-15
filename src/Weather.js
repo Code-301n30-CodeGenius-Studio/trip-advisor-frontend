@@ -1,6 +1,6 @@
 import React from "react";
 import Card from 'react-bootstrap/Card';
-
+// import CardHeader from 'react-bootstrap/CardHeader'
 import CardGroup from 'react-bootstrap/CardGroup';
 class Weather extends React.Component {
 
@@ -8,7 +8,7 @@ class Weather extends React.Component {
     console.log()
     return (
        <CardGroup className="weatherCards">
-
+         {/* <Card.Header>This is your five day forecast:</Card.Header> */}
         {this.props.weatherData.map((elements, idx) =>
           <Card 
           border="success" style={{ width: '25rem' }}

@@ -216,11 +216,6 @@ render() {
       {this.state.displayInfo && (
         <Container>
 
-          <Weather 
-          weatherData = {this.state.weatherData}
-          Icons={this.Icons} 
-          />
-
           <NationalPark
             handleInput={this.handleInput}
             showModal={this.state.showModal}
@@ -232,8 +227,13 @@ render() {
             errorIn={this.state.errorIn}
             displayInfo={this.state.displayInfo}
             yelpData={this.state.yelpData}
-          />
+            city = {this.state.city}
+            />
 
+          <Weather 
+          weatherData = {this.state.weatherData}
+          Icons={this.Icons} 
+          />
 
         </Container>
 

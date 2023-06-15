@@ -14,6 +14,7 @@ class NationalPark extends React.Component {
   render() {
     return (
       <div>
+        <p>This is your selected city: {this.props.city}</p>
 
         {this.props.displayInfo && (
           <Accordion className="allInfo" defaultActiveKey='0'>
