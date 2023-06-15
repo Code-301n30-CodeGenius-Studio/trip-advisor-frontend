@@ -96,8 +96,28 @@ background-color:seashell;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bolder;
   color: white;
-  margin-bottom: 5px;
 }
+
+.authButton {
+  margin-left: 200px;
+}
+
+.userInfo {
+  width: 50px;
+  display: flex;
+  padding-left: 160px;
+  margin-left: 200px;
+}
+
+.userImg {
+  height: 40px;
+}
+
+.userName {
+  padding-left: 10px;
+  color: aliceblue;
+}
+
 
 .social_icons {
   display: flex;
@@ -115,6 +135,7 @@ background-color:seashell;
   color: rgb(41, 3, 3);
 }
 
+
 .about-us-container {
   display: flex;
   justify-content: center;
@@ -127,3 +148,4 @@ h2 {
   text-align: center;
 
 }
+

@@ -3,7 +3,9 @@ import "./Main.css";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import NationalPark from "./NationalPark";
+import Weather from "./Weather"
 import { withAuth0 } from '@auth0/auth0-react';
+
 // const localDataNationalData = `${process.env.REACT_APP_SERVER}/national`;
 class Main extends React.Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class Main extends React.Component {
       showModal: false,
       locationData: [],
       weatherData: [],
-      parkName: []
+      yelpData: [],
     };
     this.resetStates = this.resetStates.bind(this);
   }
@@ -100,14 +102,15 @@ class Main extends React.Component {
   handleInput = (event) => {
     this.setState({
       city: event.target.value,
-    }, () => console.log(this.state.city));
+    },
+    //  () => console.log(this.state.city)
+    );
   };
 
   fetchCityData = async () => {
     const { city } = this.state;
-    // console.log(city)
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
-    console.log(url)
+    // console.log(url)
     try {
       const response = await axios.get(url);
       this.setState({
@@ -116,6 +119,7 @@ class Main extends React.Component {
         displayInfo: true,
         errorIn: false,
       }, () => this.fetchYelpData()
+
       );
 
     
@@ -128,91 +132,129 @@ class Main extends React.Component {
 };
 
 
-fetchLocationData = async () => {
-  const { city } = this.state;
-  // console.log(city)
-  const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
-  console.log(city)
-  try {
-    const res = await axios.get(url);
-    console.log(res);
-    this.setState({
-      lat: res.data[0].lat,
-      lon: res.data[0].lon,
-      locationData: res.data,
-      displayInfo: true,
-      errorIn: false,
-    },
-      () => this.fetchWeatherData()
-    );
-
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      errorIn: true,
-    },
-    );
-  }
-};
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        };
+        return axios.get(url, config);
+      })
+      .then(response => {
+        this.setState({
+          parkName: response.data.length > 0 ? response.data[0].name : "",
+          thisIsArrOfNationalPark: response.data,
+          displayInfo: true,
+          errorIn: false,
+        }, () => this.fetchYelpData());
+        
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({
+          errorIn: true,
+        });
+      });
+  };
+  
 
 
 
+  fetchLocationData = async () => {
+    const { city } = this.state;
+    const url = `${process.env.REACT_APP_SERVER}/locationIQ/?city=${city}`;
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        };
+        return axios.get(url, config);
+      })
+      .then(res => {
+        console.log(res);
+        this.setState({
+          lat: res.data[0].lat,
+          lon: res.data[0].lon,
+          locationData: res.data,
+          displayInfo: true,
+          errorIn: false,
+        }, () => this.fetchWeatherData());
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          errorIn: true,
+        });
+      });
+  };
+  
 
-fetchYelpData = async () => {
-  const { thisIsArrOfNationalPark, city, lat, lon } = this.state;
-  try {
-    const requests = thisIsArrOfNationalPark.map((park) => {
-      const name = park.name;
-      const url = `${process.env.REACT_APP_SERVER}/yelp/?latitude=${lat}&longitude=${lon}&term=${name}&location=${city}`;
-      return axios.get(url);
-    });
 
-    const responses = await Promise.all(requests);
-    const yelpData = responses.map((res) => res.data);
+  fetchYelpData = async () => {
+    const { thisIsArrOfNationalPark, city, lat, lon } = this.state;
+    try {
+      const requests = thisIsArrOfNationalPark.map((park) => {
+        const name = park.name;
+        const url = `${process.env.REACT_APP_SERVER}/yelp/?latitude=${lat}&longitude=${lon}&term=${name}&location=${city}`;
+        return this.getJwt()
+          .then(jwt => {
+            const config = {
+              headers: { 'Authorization': `Bearer ${jwt}` }
+            };
+            return axios.get(url, config);
+          });
+      });
+  
+      const responses = await Promise.all(requests);
+      const yelpData = responses.map((res) => res.data);
+  
+      this.setState({
+        yelpData: yelpData,
+        displayInfo: true,
+        errorIn: false,
+      }, () => console.log(this.state.yelpData));
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        errorIn: true,
+      });
+    }
+  };
+  
 
-    this.setState({
-      yelpData: yelpData,
-      displayInfo: true,
-      errorIn: false,
-    }, () => console.log(this.state.yelpData));
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      errorIn: true,
-    });
-  }
-};
 
 
+  fetchWeatherData = async () => {
+    const { lat, lon } = this.state;
+    const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`;
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        };
+        return axios.get(url, config);
+      })
+      .then(res => {
+        this.setState({
+          weatherData: res.data,
+          displayInfo: true,
+          errorIn: false,
+        }, () => console.log(this.state.weatherData));
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          errorIn: true,
+        });
+      });
+  };
+  
 
-fetchWeatherData = async () => {
-  const { lat, lon } = this.state;
-  const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`;
-  console.log(url)
-  try {
-    const res = await axios.get(url);
-    this.setState({
-      weatherData: res.data,
-      displayInfo: true,
-      errorIn: false,
-
-    }, () =>
-      console.log(this.state.weatherData)
-    )
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      errorIn: true,
-    });
-  }
-}
 
 
 handleExplore = (e) => {
   e.preventDefault();
   this.fetchCityData();
   this.fetchLocationData();
-  // this.fetchYelpData();
   this.setState({ showModal: false });
 };
 
@@ -273,6 +315,13 @@ render() {
             thisIsArrOfNationalPark={this.state.thisIsArrOfNationalPark}
             errorIn={this.state.errorIn}
             displayInfo={this.state.displayInfo}
+            yelpData={this.state.yelpData}
+            city = {this.state.city}
+            />
+
+          <Weather 
+          weatherData = {this.state.weatherData}
+          Icons={this.Icons} 
           />
 
         </Container>
