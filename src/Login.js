@@ -6,16 +6,13 @@ import {withAuth0} from '@auth0/auth0-react';
 
 function Login() {
 
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-  } = useAuth0();
+  const {isAuthenticated,loginWithRedirect} = useAuth0();
 
   function handleLogin() {
     loginWithRedirect();
   }
 
-  return ! isAuthenticated &&
+  return !isAuthenticated &&
     <Button className ='login' onClick={handleLogin}>Log in</Button>
   ;
 }
