@@ -3,7 +3,7 @@ import "./Main.css";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import NationalPark from "./NationalPark";
-
+import { withAuth0 } from '@auth0/auth0-react';
 // const localDataNationalData = `${process.env.REACT_APP_SERVER}/national`;
 class Main extends React.Component {
   constructor(props) {
@@ -24,6 +24,78 @@ class Main extends React.Component {
     };
     this.resetStates = this.resetStates.bind(this);
   }
+
+
+  getJwt = () => {
+    return this.props.auth0.getIdTokenClaims()
+      .then(res => res.__raw)
+      .catch(err => console.error(err))
+  }
+
+  pullUsers = () => {
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.get(`${process.env.REACT_APP_SERVER}/users`, config);
+      })
+      .then(response => this.setState({ parkName: response.data }))
+      .catch(err => console.error(err));
+  }
+
+  postUsers = (newUser) => {
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.post(`${process.env.REACT_APP_SERVER}/users`, newUser, config)
+      })
+      .then(response => this.setState({ parkName: [...this.state.parkName, response.data] }))
+      .catch(err => console.error(err));
+  }
+
+  deleteUsers = async (userToDelete) => {
+    console.log('inside the delete function');
+    console.log(userToDelete);
+    const url = `${process.env.REACT_APP_SERVER}/users/${userToDelete._id}`;
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        const updatedUsers = axios.delete(url, config)
+        return updatedUsers
+      })
+      .then(updatedUsers => {
+        console.log(this.state.parkName);
+        const updatedUsersArr = this.state.parkName.filter(element => element._id !== userToDelete._id)
+        this.setState({ parkName: updatedUsersArr })
+      })
+      .catch(err => console.error(err));
+    console.log(this.updatedUsers)
+  };
+
+  updateUsers = (userToUpdate) => {
+    console.log(userToUpdate);
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        return axios.put(`${process.env.REACT_APP_SERVER}/users/${userToUpdate._id}`, userToUpdate, config)
+      })
+      .then( userToUpdate => {
+        console.log(userToUpdate.data);
+       const updateUsersArr = this.state.books.map(val => val._id === userToUpdate.data._id ? userToUpdate.data : val)
+        this.setState({ books: updateUsersArr })
+      })
+      .catch(err => console.error(err))
+  };
+
+
+
 
   handleInput = (event) => {
     this.setState({
@@ -111,33 +183,7 @@ fetchYelpData = async () => {
   }
 };
 
-// fetchYelpData = async () => {
-//   const { thisIsArrOfNationalPark } = this.state;
-//   const { city } = this.state;
-//   const { lat } = this.state;
-//   const { lon } = this.state;
-//   try {
-//     for (let i = 0; i < thisIsArrOfNationalPark.length; i++) {
-//       const park = thisIsArrOfNationalPark[i];
-//       const name = park.name;
-//       const url = `${process.env.REACT_APP_SERVER}/yelp/?latitude=${lat}&longitude=${lon}&term=${name}&location=${city}`;
-    
 
-//       const res = await axios.get(url);
-//       this.setState({
-//         yelpData: res.data,
-//         displayInfo: true,
-//         errorIn: false,
-//       },() => console.log(this.state.yelpData)
-//       );
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     this.setState({
-//       errorIn: true,
-//     });
-//   }
-// }
 
 fetchWeatherData = async () => {
   const { lat, lon } = this.state;
@@ -238,4 +284,4 @@ render() {
 }
 }
 
-export default Main;
+export default withAuth0(Main);

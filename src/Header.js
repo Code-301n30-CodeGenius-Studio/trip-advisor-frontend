@@ -3,6 +3,8 @@ import { Navbar, Nav, Col, Row, Button} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './App.css'
 import logo from "./img/pngwing.com.png"
+import { withAuth0 } from '@auth0/auth0-react';
+import AuthButtons from './AuthButtons';
 
 class Header extends React.Component {
   render() { 
@@ -30,6 +32,7 @@ class Header extends React.Component {
             
             <Col>
             <Row>
+            <AuthButtons/>
             </Row>
             </Col>
           </Nav>
@@ -39,4 +42,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default withAuth0(Header);
