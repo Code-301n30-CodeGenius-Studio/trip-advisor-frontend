@@ -3,7 +3,9 @@ import "./Main.css";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import NationalPark from "./NationalPark";
+import Weather from "./Weather"
 import { withAuth0 } from '@auth0/auth0-react';
+
 // const localDataNationalData = `${process.env.REACT_APP_SERVER}/national`;
 class Main extends React.Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class Main extends React.Component {
       showModal: false,
       locationData: [],
       weatherData: [],
-      parkName: []
+      yelpData: [],
     };
     this.resetStates = this.resetStates.bind(this);
   }
@@ -100,12 +102,36 @@ class Main extends React.Component {
   handleInput = (event) => {
     this.setState({
       city: event.target.value,
-    }, () => console.log(this.state.city));
+    },
+    //  () => console.log(this.state.city)
+    );
   };
 
   fetchCityData = async () => {
     const { city } = this.state;
     const url = `${process.env.REACT_APP_SERVER}/national/?query=${city}`;
+    // console.log(url)
+    try {
+      const response = await axios.get(url);
+      this.setState({
+        parkName: response.data[0].name,
+        thisIsArrOfNationalPark: response.data,
+        displayInfo: true,
+        errorIn: false,
+      }, () => this.fetchYelpData()
+
+      );
+
+    
+    } catch(error) {
+    console.error(`${error}`);
+    this.setState({
+      errorIn: true,
+    });
+  }
+};
+
+
     this.getJwt()
       .then(jwt => {
         const config = {
@@ -130,6 +156,7 @@ class Main extends React.Component {
       });
   };
   
+
 
 
   fetchLocationData = async () => {
@@ -160,8 +187,6 @@ class Main extends React.Component {
       });
   };
   
-
-
 
 
   fetchYelpData = async () => {
@@ -225,11 +250,11 @@ class Main extends React.Component {
   
 
 
+
 handleExplore = (e) => {
   e.preventDefault();
   this.fetchCityData();
   this.fetchLocationData();
-  // this.fetchYelpData();
   this.setState({ showModal: false });
 };
 
@@ -290,6 +315,13 @@ render() {
             thisIsArrOfNationalPark={this.state.thisIsArrOfNationalPark}
             errorIn={this.state.errorIn}
             displayInfo={this.state.displayInfo}
+            yelpData={this.state.yelpData}
+            city = {this.state.city}
+            />
+
+          <Weather 
+          weatherData = {this.state.weatherData}
+          Icons={this.Icons} 
           />
 
         </Container>
