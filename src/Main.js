@@ -192,18 +192,32 @@ class Main extends React.Component {
       console.log('yelp responses:', responses)
       const yelpData = responses.map((res) => res.data);
   
-      this.setState({
-        yelpData: yelpData,
-        displayInfo: true,
-        errorIn: false,
-      }, () => console.log(this.state.yelpData));
+      if (yelpData.every(Array.isArray)) {
+        this.setState({
+          yelpData: yelpData,
+          displayInfo: true,
+          errorIn: false,
+        }, () => console.log(this.state.yelpData));
+      } else {
+        this.setState({
+          yelpData: [],
+          displayInfo: true,
+          errorIn: false,
+        });
+      }
     } catch (err) {
       console.log(err);
       this.setState({
+        yelpData: [],
+        displayInfo: true,
         errorIn: true,
       });
     }
   };
+  
+  
+  
+  
   
 
 
@@ -262,7 +276,7 @@ render() {
   return (
     <>
       <div id="modalButton">
-        <Button variant="primary" onClick={this.handleOpen}>
+        <Button id="parkButton" variant="primary" onClick={this.handleOpen}>
           National Park Finder
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import Accordion from 'react-bootstrap/Accordion';
-
+import './App.css'
 
 class NationalPark extends React.Component {
   renderYelpData(yelpData) {
@@ -19,7 +19,7 @@ class NationalPark extends React.Component {
   render() {
     return (
       <div>
-        <p>This is your selected city: {this.props.city}</p>
+        <p className="selectedCity">This is your selected city: {this.props.city}</p>
 
         {this.props.displayInfo && (
           <Accordion className="allInfo" defaultActiveKey='0'>
@@ -29,17 +29,17 @@ class NationalPark extends React.Component {
                 <Accordion.Body>
                   <div>
                     <p>{elements.description}</p>
-                    <a href={elements.directions}>
+                    <a href={elements.directions} target="_blank" rel="noreferrer">
                       Click Here to see the direction
                     </a>
 
-                    <img
+                    {/* <img
                       className="national_park"
                       alt={elements.name}
                       src={elements.image}
-                    />
+                    /> */}
 
-                    <p>Standard Hours:</p>
+                    <p className="selectedCity">Standard Hours:</p>
 
                     <ul>
                       {Object.entries(elements.workHours).map(([day, hours]) => (
@@ -48,7 +48,7 @@ class NationalPark extends React.Component {
                         </li>
                       ))}
                     </ul>
-                    <p>Yelp Reviews:</p>
+                    <p className="selectedCity">Yelp Reviews:</p>
                     {this.props.yelpData.length > 0 && this.renderYelpData(this.props.yelpData[idx])}
                   </div>
 

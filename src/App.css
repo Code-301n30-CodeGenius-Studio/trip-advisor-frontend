@@ -105,7 +105,7 @@ background-color:seashell;
 .userInfo {
   width: 50px;
   display: flex;
-  padding-left: 160px;
+  padding-left: 460px;
   margin-left: 200px;
 }
 
@@ -146,6 +146,19 @@ background-color:seashell;
 h2 {
   font-family:Georgia, 'Times New Roman', Times, serif;
   text-align: center;
-
 }
 
+.selectedCity {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+  padding-top: 10px;
+}
+
+#parkButton {
+  background: #00BCEB;
+  color: aliceblue;
+  border: 2px solid #005072;
+  border-radius: 3px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
