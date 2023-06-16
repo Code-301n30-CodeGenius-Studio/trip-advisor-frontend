@@ -1,50 +1,55 @@
-import React from 'react';
+import React from "react";
+import axios from "axios";
+import NationalPark from "./NationalPark";
 
-import { Card, Form, Button } from 'react-bootstrap';
-
-class SavePark extends React.Component {
-
+class savePark extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      formData: {}
-    };
+    this.postUsers = this.postUsers.bind(this);
   }
 
-  handleChange = (e) => {
-    const field = e.target.name;
-    const value = e.target.value;
-    const formData = this.state.formData;
-    formData[field] = value;
-    this.setState({ formData });
-  }
-
-  handleSubmit = (e) => {
+  handleFavorite = (e) => {
     e.preventDefault();
-    this.props.handleAddItem(this.state.formData)
+
+    const newUser = {
+      parkName: e.target.parkName.value,
+    };
+    this.postUsers(newUser);
+
+    this.props.hideModal();
+  };
+
+  postUsers(newUser) {
+    this.getJwt()
+      .then((jwt) => {
+        const config = {
+          headers: { Authorization: `Bearer ${jwt}` },
+        };
+        return axios.post(
+          `${process.env.REACT_APP_SERVER}/users`,
+          newUser,
+          config
+        );
+      })
+      .then((response) => {
+        // Update the state with the saved item
+        this.setState((prevState) => ({
+          parkName: [...prevState.parkName, response.data],
+        }));
+      })
+      .catch((err) => console.error(err));
   }
 
   render() {
-
     return (
-      <Form data-testid="add-form" onSubmit={this.handleSubmit}>
-        <Card style={{ width: '18rem' }}>
-          <Card.Header>Add Item</Card.Header>
-          <Card.Body>
-            <Form.Group>
-              <Form.Label>Item</Form.Label>
-              <Form.Control type="text" placeholder="To Do Item" data-testid="add-form-name" name="name" onChange={this.handleChange} />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Description</Form.Label>
-              <Form.Control type="text" placeholder="Description" data-testid="add-form-description" name="description" onChange={this.handleChange} />
-            </Form.Group>
-            <Button variant="primary" type="submit">Add Item</Button>
-          </Card.Body>
-        </Card>
-      </Form>
+      <div>
+        <NationalPark
+          handleFavorite={this.handleFavorite}
+        />
+        <p>Fav Park</p>
+      </div>
     );
   }
 }
 
-export default SavePark;
+export default savePark;

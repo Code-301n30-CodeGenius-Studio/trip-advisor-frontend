@@ -46,17 +46,17 @@ class Main extends React.Component {
       .catch(err => console.error(err));
   }
 
-  postUsers = (newUser) => {
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        return axios.post(`${process.env.REACT_APP_SERVER}/users`, newUser, config)
-      })
-      .then(response => this.setState({ parkName: [...this.state.parkName, response.data] }))
-      .catch(err => console.error(err));
-  }
+  // postUsers = (newUser) => {
+  //   this.getJwt()
+  //     .then(jwt => {
+  //       const config = {
+  //         headers: { 'Authorization': `Bearer ${jwt}` }
+  //       }
+  //       return axios.post(`${process.env.REACT_APP_SERVER}/users`, newUser, config)
+  //     })
+  //     .then(response => this.setState({ parkName: [...this.state.parkName, response.data] }))
+  //     .catch(err => console.error(err));
+  // }
 
   deleteUsers = async (userToDelete) => {
     console.log('inside the delete function');
@@ -155,7 +155,7 @@ class Main extends React.Component {
           displayInfo: true,
           errorIn: false,
         }
-        // , () => this.fetchWeatherData()
+        , () => this.fetchWeatherData()
         );
       })
       .catch(err => {
@@ -326,6 +326,7 @@ render() {
         </Container>
 
       )}
+      {/* Should we comment this? */}
       {this.state.errorIn && <p>Error: City not found.</p>}
     </>
   );
