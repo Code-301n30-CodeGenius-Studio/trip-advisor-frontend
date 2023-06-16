@@ -4,7 +4,7 @@ import "./App.css";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { withAuth0 } from "@auth0/auth0-react";
-// import Profile from "./Profile";
+
 
 class NationalPark extends React.Component {
   constructor(props) {
@@ -46,15 +46,6 @@ class NationalPark extends React.Component {
     this.setState({ isParkAdded: idx });
   };
 
-  // handleDelete = (park) => {
-  //   // const deleteUser = {
-  //   //   parkName: park.name,
-
-  //   // };
-  //   // console.log(park)
-  //   this.deleteUsers(park.name);
-  // };
-
   componentDidMount() {
     this.pullUsers();
   }
@@ -88,8 +79,11 @@ class NationalPark extends React.Component {
       .then(() => {
         const updatedParks = { ...this.state.parks };
         delete updatedParks[parkId];
-        this.setState({ parks: updatedParks });
-        console.log(this.state.parks);
+        this.setState({ parks: updatedParks }, () => {
+          console.log(this.state.parks);
+          this.pullUsers(); // Fetch updated data after successful deletion
+        });
+
       })
       .catch((err) => {
         console.error(err);
@@ -134,26 +128,7 @@ class NationalPark extends React.Component {
   //   }
   // };
 
-  // deleteUsers = async (parkToDelete) => {
-  //   console.log("inside the delete function");
-  //   console.log(parkToDelete);
-  //   const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete._id}`;
-  //   this.getJwt()
-  //     .then((jwt) => {
-  //       const config = {
-  //         headers: { Authorization: `Bearer ${jwt}` },
-  //       };
-  //       const updatedUsers = axios.delete(url, config);
-  //       return updatedUsers;
-  //     })
-  //     .then(updatedUsers => {
-  //       console.log(this.state.parks);
-  //       const updatedUsersArr = this.state.parks.filter(element => element._id !== parkToDelete._id)
-  //       this.setState({ parks: updatedUsersArr })
-  //     })
-  //     .catch((err) => console.error(err));
-  //   console.log(this.updatedUsers);
-  // }
+
 
   postUsers(newUser) {
     this.getJwt()
@@ -227,7 +202,7 @@ class NationalPark extends React.Component {
                       </Button>
 
                       {this.state.isParkAdded === idx && (
-                        <h3>{elements.name} has been added to favorites!</h3>
+                        <h5 >{elements.name} has been added to favorites!</h5>
                       )}
                     </div>
                   </Accordion.Body>
@@ -235,12 +210,11 @@ class NationalPark extends React.Component {
               ))}
             </Accordion>
           )}
-          {/* {this.props.errorIn && <p>Error: City not found.</p>} */}
+   
         </div>
 
-        {/* <Profile delPark = {this.deleteUsers} /> */}
         <div>
-        <h4>The Favorite parks of your choice</h4>
+        <h4 className="favPark">The Favorite parks of your choice</h4>
        
       <Accordion >
         {Object.keys(this.state.parks).map((key) => (
@@ -248,7 +222,7 @@ class NationalPark extends React.Component {
             <Accordion.Header>{this.state.parks[key].parkName}</Accordion.Header>
             <Accordion.Body>
               <ol>
-              <Button onClick={() => this.handleDelete(this.state.parks[key]._id)} >
+              <Button variant="danger" onClick={() => this.handleDelete(this.state.parks[key]._id)} >
               Delete from the favorite
             </Button>
               </ol>

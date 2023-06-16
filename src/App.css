@@ -152,7 +152,8 @@ h2 {
 .selectedCity {
   font-family: 'Courier New', Courier, monospace;
   font-weight: bolder;
-  padding-top: 10px;
+  padding-top: 40px;
+  text-align: center;
 }
 
 #parkButton {
@@ -164,8 +165,16 @@ h2 {
   text-transform: uppercase;
 }
 
-h3 {
-  padding-top: 15px;
+h5 {
+  margin-top: 15px;
   font-family: 'Courier New', Courier, monospace;
   font-weight: bolder;
+}
+
+.favPark {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+  text-align: center;
 }
