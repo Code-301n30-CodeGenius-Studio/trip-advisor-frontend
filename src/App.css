@@ -84,11 +84,12 @@ background-color:seashell;
 .footer {
   height: 45px;
   background-color: #00BCEB;
-  position: relative;
+  /* position: fixed; */
   display: flex;
   align-items: center;
   justify-content: center;
   top: 30px;
+  margin-top: 200px;
 }
 
 .footer_text {
@@ -161,4 +162,10 @@ h2 {
   border-radius: 3px;
   padding: 5px 10px;
   text-transform: uppercase;
+}
+
+h3 {
+  padding-top: 15px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
 }

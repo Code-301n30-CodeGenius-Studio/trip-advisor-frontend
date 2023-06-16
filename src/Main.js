@@ -46,38 +46,30 @@ class Main extends React.Component {
       .catch(err => console.error(err));
   }
 
-  // postUsers = (newUser) => {
+ 
+
+ 
+
+ // deleteUsers = async (userToDelete) => {
+  //   console.log('inside the delete function');
+  //   console.log(userToDelete);
+  //   const url = `${process.env.REACT_APP_SERVER}/users/${userToDelete._id}`;
   //   this.getJwt()
   //     .then(jwt => {
   //       const config = {
   //         headers: { 'Authorization': `Bearer ${jwt}` }
   //       }
-  //       return axios.post(`${process.env.REACT_APP_SERVER}/users`, newUser, config)
+  //       const updatedUsers = axios.delete(url, config)
+  //       return updatedUsers
   //     })
-  //     .then(response => this.setState({ parkName: [...this.state.parkName, response.data] }))
+  //     .then(updatedUsers => {
+  //       console.log(this.state.parkName);
+  //       const updatedUsersArr = this.state.parkName.filter(element => element._id !== userToDelete._id)
+  //       this.setState({ parkName: updatedUsersArr })
+  //     })
   //     .catch(err => console.error(err));
-  // }
-
-  deleteUsers = async (userToDelete) => {
-    console.log('inside the delete function');
-    console.log(userToDelete);
-    const url = `${process.env.REACT_APP_SERVER}/users/${userToDelete._id}`;
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        const updatedUsers = axios.delete(url, config)
-        return updatedUsers
-      })
-      .then(updatedUsers => {
-        console.log(this.state.parkName);
-        const updatedUsersArr = this.state.parkName.filter(element => element._id !== userToDelete._id)
-        this.setState({ parkName: updatedUsersArr })
-      })
-      .catch(err => console.error(err));
-    console.log(this.updatedUsers)
-  };
+  //   console.log(this.updatedUsers)
+  // };
 
   updateUsers = (userToUpdate) => {
     console.log(userToUpdate);
@@ -289,7 +281,7 @@ render() {
         <Modal.Body>
           <Form onSubmit={this.handleExplore}>
             <Form.Group className="mb-3">
-              <Form.Label>Enter a city name or zipcode</Form.Label>
+              <Form.Label>Enter a city name or state</Form.Label>
               <Form.Control type="text" onChange={this.handleInput} />
             </Form.Group>
             <Button
@@ -304,7 +296,7 @@ render() {
       </Modal>
 
       {this.state.displayInfo && (
-        <Container>
+        <Container className="mainPage">
 
           <NationalPark
             handleInput={this.handleInput}
@@ -318,6 +310,7 @@ render() {
             displayInfo={this.state.displayInfo}
             yelpData={this.state.yelpData}
             city = {this.state.city}
+           
             />
 
           <Weather 

@@ -4,10 +4,16 @@ import "./App.css";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { withAuth0 } from "@auth0/auth0-react";
-
-const { name, email } = withAuth0();
+// import Profile from "./Profile";
 
 class NationalPark extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isParkAdded: -1,
+      parks:{}
+    };
+  }
   renderYelpData(yelpData) {
     if (!yelpData) {
       return <p>No Yelp reviews available</p>;
@@ -21,16 +27,28 @@ class NationalPark extends React.Component {
     ));
   }
 
-  handleFavorite = (park) => {
-    console.log(park.name)
+  handleFavorite = (park, idx) => {
+    console.log(park.name);
     const newUser = {
       parkName: park.name,
-      email:email
+      email: this.props.auth0.email,
     };
     this.postUsers(newUser);
-
-    // this.props.hideModal();
+    this.setState({ isParkAdded: idx });
   };
+
+  handleDelete = (park) => {
+    // const deleteUser = {
+    //   parkName: park.name,
+
+    // };
+    // console.log(park)
+    this.deleteUsers(park.name);
+  };
+
+  componentDidMount() {
+    this.pullUsers();
+  }
 
   getJwt = () => {
     return this.props.auth0
@@ -38,6 +56,45 @@ class NationalPark extends React.Component {
       .then((res) => res.__raw)
       .catch((err) => console.error(err));
   };
+  
+  pullUsers = () => {
+    this.getJwt()
+      .then(jwt => {
+        const config = {
+          headers: { 'Authorization': `Bearer ${jwt}` }
+        }
+        const url = `${process.env.REACT_APP_SERVER}/users`;
+        // console.log('The whole url getting from MongoDB- ', url)
+        return axios.get(url, config);
+      })
+      .then(response => {
+        console.log(response.data); // Log the response data
+        this.setState({ parks: response.data });
+      })
+      .catch(err => console.error(err));
+      
+  }
+
+  // deleteUsers = async (parkToDelete) => {
+  //   console.log("inside the delete function");
+  //   console.log(parkToDelete);
+  //   const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete._id}`;
+  //   this.getJwt()
+  //     .then((jwt) => {
+  //       const config = {
+  //         headers: { Authorization: `Bearer ${jwt}` },
+  //       };
+  //       const updatedUsers = axios.delete(url, config);
+  //       return updatedUsers;
+  //     })
+  //     .then(updatedUsers => {
+  //       console.log(this.state.parks);
+  //       const updatedUsersArr = this.state.parks.filter(element => element._id !== parkToDelete._id)
+  //       this.setState({ parks: updatedUsersArr })
+  //     })
+  //     .catch((err) => console.error(err));
+  //   console.log(this.updatedUsers);
+  // }
 
   postUsers(newUser) {
     this.getJwt()
@@ -50,17 +107,15 @@ class NationalPark extends React.Component {
           newUser,
           config
         );
+
       })
-      // .then((response) => {
-      //   // Update the state with the saved item
-      //   this.setState((prevState) => ({
-      //     parkName: [...prevState.parkName, response.data],
-      //   }));
-      // })
+      .then(response => this.setState({ parks: [...this.state.parks, response.data] },() => console.log('checking whats in the parks state', this.state.parks)))
       .catch((err) => console.error(err));
   }
+  
   render() {
     return (
+      <>
       <div>
         <p className="selectedCity">
           This is your selected city: {this.props.city}
@@ -103,35 +158,33 @@ class NationalPark extends React.Component {
                     <p className="selectedCity">Yelp Reviews:</p>
                     {this.props.yelpData.length > 0 &&
                       this.renderYelpData(this.props.yelpData[idx])}
-                    <Button onClick={() => this.handleFavorite(elements)}>
+                    <Button onClick={() => this.handleFavorite(elements, idx)}>
                       Save to Favorite
                     </Button>
-                  </div>
-
-                  {/* <p>Exception Hours:</p>
-            <ul>
-              {this.state.exceptions.map((exception) => (
-                <li key={exception.name}>
-                  <p>Holiday: {exception.name}</p>
-                  <ul>
-                    {Object.entries(exception.exceptionHours[0]).map(
-                      ([day, hours]) => (
-                        <li key={day}>
-                          {day}: {hours}
-                        </li>
-                      )
+                    
+                    {this.state.isParkAdded === idx && (
+                      <h3>{elements.name} has been added to favorites!</h3>
                     )}
-                  </ul>
-                </li>
-              ))}
-            </ul> */}
+                  </div>
                 </Accordion.Body>
               </Accordion.Item>
             ))}
           </Accordion>
         )}
         {this.props.errorIn && <p>Error: City not found.</p>}
+
+  
       </div>
+      <div>
+
+        <h4>The Favorite parks of your choice</h4>
+        <ol>
+          <li>
+            {this.state.parks}
+          </li>
+        </ol>
+      </div>
+         </>             
     );
   }
 }
