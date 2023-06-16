@@ -322,7 +322,7 @@ render() {
 
       )}
       {/* Should we comment this? */}
-      {this.state.errorIn && <p>Error: City not found.</p>}
+      {/* {this.state.errorIn && <p>Error: City not found.</p>} */}
     </>
   );
 }

@@ -74,29 +74,51 @@ class NationalPark extends React.Component {
       .catch((err) => console.error(err));
   };
 
-  deleteUsers = async (parkToDelete) => {
-    console.log("inside the delete function");
-    console.log(parkToDelete);
-    const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete._id}`;
-    this.getJwt()
-      .then((jwt) => {
-        const config = {
-          headers: { Authorization: `Bearer ${jwt}` },
-        };
-        const updatedUsers = axios.delete(url, config);
-        return updatedUsers;
-      })
-      .then((updatedUsers) => {
-        console.log(this.state.parks);
-        const updatedUsersArr = this.state.parks.filter(
-          (element) => element._id !== parkToDelete._id
-        );
-        this.setState({ parks: updatedUsersArr });
-      })
-      .catch((err) => console.error(err));
-    console.log(this.updatedUsers);
-  };
+  // deleteUsers = async (parkToDelete) => {
+  //   console.log("inside the delete function");
+  //   console.log(parkToDelete);
+  //   const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete}`;
+  //   this.getJwt()
+  //     .then((jwt) => {
+  //       const config = {
+  //         headers: { Authorization: `Bearer ${jwt}` },
+  //       };
+  //       const updatedUsers = axios.delete(url, config);
+  //       return updatedUsers;
+  //     })
+  //     .then((updatedUsers) => {
+  //       console.log(this.state.parks);
+  //       const updatedUsersArr = this.state.parks.filter(
+  //         (element) => element._id !== parkToDelete._id
+  //       );
+  //       this.setState({ parks: updatedUsersArr });
+  //     })
+  //     .catch((err) => console.error(err));
+  //   console.log(this.updatedUsers);
+  // };
 
+  deleteUsers = async (parkToDelete) => {
+    try {
+      console.log("inside the delete function");
+      console.log(parkToDelete);
+      const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete}`;
+      const jwt = await this.getJwt();
+      const config = {
+        headers: { Authorization: `Bearer ${jwt}` },
+      };
+      await axios.delete(url, config);
+  
+      // Create a copy of the parks object in the state
+      const updatedParks = { ...this.state.parks };
+      // Delete the property representing the park to be removed
+      delete updatedParks[parkToDelete];
+      this.setState({ parks: updatedParks });
+  
+      console.log(this.state.parks);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // deleteUsers = async (parkToDelete) => {
   //   console.log("inside the delete function");
@@ -199,8 +221,10 @@ class NationalPark extends React.Component {
               ))}
             </Accordion>
           )}
-          {this.props.errorIn && <p>Error: City not found.</p>}
+          {/* {this.props.errorIn && <p>Error: City not found.</p>} */}
         </div>
+
+        {/* <Profile delPark = {this.deleteUsers} /> */}
         <div>
         <h4>The Favorite parks of your choice</h4>
       <Accordion>
