@@ -5,7 +5,7 @@ import "./App.css";
 class User extends React.Component {
     render() {
         const { isAuthenticated, user } = this.props.auth0;
-        console.log(this.props.auth0);
+        // console.log(this.props.auth0);
         return (
             isAuthenticated && (
       < div className="userInfo" >

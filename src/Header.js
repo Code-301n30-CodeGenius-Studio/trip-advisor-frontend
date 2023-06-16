@@ -5,8 +5,7 @@ import './App.css'
 import logo from "./img/pngwing.com.png"
 import { withAuth0 } from '@auth0/auth0-react';
 import AuthButtons from './AuthButtons';
-import User
- from './User';
+import User from './User';
 class Header extends React.Component {
   render() { 
     return (
@@ -17,7 +16,7 @@ class Header extends React.Component {
           width="30"
           height="30"
           className='nav-logo'
-        />Trip Advisor</Navbar.Brand>
+        />Park Finder</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">

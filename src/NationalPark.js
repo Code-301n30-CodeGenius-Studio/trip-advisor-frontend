@@ -5,9 +5,24 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import { withAuth0 } from "@auth0/auth0-react";
 
-const { name, email } = withAuth0();
 
 class NationalPark extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isParkAdded: -1,
+      parks: {},
+    };
+    this.resetStates = this.resetStates.bind(this);
+  }
+
+  resetStates = () => {
+    this.setState({
+      displayInfo: false,
+      errorIn: false,
+    });
+  };
+
   renderYelpData(yelpData) {
     if (!yelpData) {
       return <p>No Yelp reviews available</p>;
@@ -21,16 +36,19 @@ class NationalPark extends React.Component {
     ));
   }
 
-  handleFavorite = (park) => {
-    console.log(park.name)
+  handleFavorite = (park, idx) => {
+    console.log(park.name);
     const newUser = {
       parkName: park.name,
-      email:email
+      email: this.props.auth0.email,
     };
     this.postUsers(newUser);
-
-    // this.props.hideModal();
+    this.setState({ isParkAdded: idx });
   };
+
+  componentDidMount() {
+    this.pullUsers();
+  }
 
   getJwt = () => {
     return this.props.auth0
@@ -38,6 +56,79 @@ class NationalPark extends React.Component {
       .then((res) => res.__raw)
       .catch((err) => console.error(err));
   };
+
+  pullUsers = () => {
+    this.getJwt()
+      .then((jwt) => {
+        const config = {
+          headers: { Authorization: `Bearer ${jwt}` },
+        };
+        const url = `${process.env.REACT_APP_SERVER}/users`;
+        // console.log('The whole url getting from MongoDB- ', url)
+        return axios.get(url, config);
+      })
+      .then((response) => {
+        console.log(response.data); // Log the response data
+        this.setState({ parks: response.data });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  handleDelete = (parkId) => {
+    this.deleteUsers(parkId)
+      .then(() => {
+        const updatedParks = { ...this.state.parks };
+        delete updatedParks[parkId];
+        this.setState({ parks: updatedParks }, () => {
+          console.log(this.state.parks);
+          this.pullUsers(); // Fetch updated data after successful deletion
+        });
+
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  
+  deleteUsers = async (parkToDelete) => {
+    try {
+      console.log("inside the delete function");
+      console.log(parkToDelete);
+      const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete}`;
+      const jwt = await this.getJwt();
+      const config = {
+        headers: { Authorization: `Bearer ${jwt}` },
+      };
+      await axios.delete(url, config);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  // deleteUsers = async (parkToDelete) => {
+  //   try {
+  //     console.log("inside the delete function");
+  //     console.log(parkToDelete);
+  //     const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete}`;
+  //     const jwt = await this.getJwt();
+  //     const config = {
+  //       headers: { Authorization: `Bearer ${jwt}` },
+  //     };
+  //     await axios.delete(url, config);
+  
+  //     // Create a copy of the parks object in the state
+  //     const updatedParks = { ...this.state.parks };
+  //     // Delete the property representing the park to be removed
+  //     delete updatedParks[parkToDelete];
+  //     this.setState({ parks: updatedParks }, () => {
+  //       console.log(this.state.parks);
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+
 
   postUsers(newUser) {
     this.getJwt()
@@ -51,87 +142,97 @@ class NationalPark extends React.Component {
           config
         );
       })
-      // .then((response) => {
-      //   // Update the state with the saved item
-      //   this.setState((prevState) => ({
-      //     parkName: [...prevState.parkName, response.data],
-      //   }));
-      // })
+      .then((response) =>
+        this.setState({ parks: [...this.state.parks, response.data] }, () =>
+          console.log("checking whats in the parks state", this.state.parks)
+        )
+      )
       .catch((err) => console.error(err));
   }
+
   render() {
     return (
-      <div>
-        <p className="selectedCity">
-          This is your selected city: {this.props.city}
-        </p>
+      <>
+        <div>
+          <p className="selectedCity">
+            This is your selected city: {this.props.city}
+          </p>
 
-        {this.props.displayInfo && (
-          <Accordion className="allInfo" defaultActiveKey="0">
-            {this.props.thisIsArrOfNationalPark.map((elements, idx) => (
-              <Accordion.Item eventKey={idx} key={idx}>
-                <Accordion.Header>{elements.name}</Accordion.Header>
+          {this.props.displayInfo && (
+            <Accordion className="allInfo" defaultActiveKey="0">
+              {this.props.thisIsArrOfNationalPark.map((elements, idx) => (
+                <Accordion.Item eventKey={idx} key={idx}>
+                  <Accordion.Header>{elements.name}</Accordion.Header>
 
-                <Accordion.Body>
-                  <div>
-                    <p>{elements.description}</p>
-                    <a
-                      href={elements.directions}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Click Here to see the direction
-                    </a>
+                  <Accordion.Body>
+                    <div>
+                      <p>{elements.description}</p>
+                      <a
+                        href={elements.directions}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Click Here to see the direction
+                      </a>
 
-                    {/* <img
+                      {/* <img
                       className="national_park"
                       alt={elements.name}
                       src={elements.image}
                     /> */}
 
-                    <p className="selectedCity">Standard Hours:</p>
+                      <p className="selectedCity">Standard Hours:</p>
 
-                    <ul>
-                      {Object.entries(elements.workHours).map(
-                        ([day, hours]) => (
-                          <li key={day}>
-                            {day}: {hours}
-                          </li>
-                        )
+                      <ul>
+                        {Object.entries(elements.workHours).map(
+                          ([day, hours]) => (
+                            <li key={day}>
+                              {day}: {hours}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                      <p className="selectedCity">Yelp Reviews:</p>
+                      {this.props.yelpData.length > 0 &&
+                        this.renderYelpData(this.props.yelpData[idx])}
+                      <Button
+                        onClick={() => this.handleFavorite(elements, idx)}
+                      >
+                        Save to Favorite
+                      </Button>
+
+                      {this.state.isParkAdded === idx && (
+                        <h5 >{elements.name} has been added to favorites!</h5>
                       )}
-                    </ul>
-                    <p className="selectedCity">Yelp Reviews:</p>
-                    {this.props.yelpData.length > 0 &&
-                      this.renderYelpData(this.props.yelpData[idx])}
-                    <Button onClick={() => this.handleFavorite(elements)}>
-                      Save to Favorite
-                    </Button>
-                  </div>
-
-                  {/* <p>Exception Hours:</p>
-            <ul>
-              {this.state.exceptions.map((exception) => (
-                <li key={exception.name}>
-                  <p>Holiday: {exception.name}</p>
-                  <ul>
-                    {Object.entries(exception.exceptionHours[0]).map(
-                      ([day, hours]) => (
-                        <li key={day}>
-                          {day}: {hours}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </li>
+                    </div>
+                  </Accordion.Body>
+                </Accordion.Item>
               ))}
-            </ul> */}
-                </Accordion.Body>
-              </Accordion.Item>
-            ))}
-          </Accordion>
-        )}
-        {this.props.errorIn && <p>Error: City not found.</p>}
-      </div>
+            </Accordion>
+          )}
+   
+        </div>
+
+        <div>
+        <h4 className="favPark">The Favorite parks of your choice</h4>
+       
+      <Accordion >
+        {Object.keys(this.state.parks).map((key) => (
+          <Accordion.Item key={key}>
+            <Accordion.Header>{this.state.parks[key].parkName}</Accordion.Header>
+            <Accordion.Body>
+              <ol>
+              <Button variant="danger" onClick={() => this.handleDelete(this.state.parks[key]._id)} >
+              Delete from the favorite
+            </Button>
+              </ol>
+            </Accordion.Body>
+          </Accordion.Item>
+        ))}
+      </Accordion>
+      
+        </div>
+      </>
     );
   }
 }

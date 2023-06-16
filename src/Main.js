@@ -23,6 +23,7 @@ class Main extends React.Component {
       locationData: [],
       weatherData: [],
       yelpData: [],
+      // parks: {},
     };
     this.resetStates = this.resetStates.bind(this);
   }
@@ -34,67 +35,59 @@ class Main extends React.Component {
       .catch(err => console.error(err))
   }
 
-  pullUsers = () => {
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        return axios.get(`${process.env.REACT_APP_SERVER}/users`, config);
-      })
-      .then(response => this.setState({ parkName: response.data }))
-      .catch(err => console.error(err));
-  }
-
-  // postUsers = (newUser) => {
+  // pullUsers = () => {
   //   this.getJwt()
   //     .then(jwt => {
   //       const config = {
   //         headers: { 'Authorization': `Bearer ${jwt}` }
   //       }
-  //       return axios.post(`${process.env.REACT_APP_SERVER}/users`, newUser, config)
+  //       return axios.get(`${process.env.REACT_APP_SERVER}/users`, config);
   //     })
-  //     .then(response => this.setState({ parkName: [...this.state.parkName, response.data] }))
+  //     .then(response => this.setState({ parkName: response.data }))
   //     .catch(err => console.error(err));
   // }
 
-  deleteUsers = async (userToDelete) => {
-    console.log('inside the delete function');
-    console.log(userToDelete);
-    const url = `${process.env.REACT_APP_SERVER}/users/${userToDelete._id}`;
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        const updatedUsers = axios.delete(url, config)
-        return updatedUsers
-      })
-      .then(updatedUsers => {
-        console.log(this.state.parkName);
-        const updatedUsersArr = this.state.parkName.filter(element => element._id !== userToDelete._id)
-        this.setState({ parkName: updatedUsersArr })
-      })
-      .catch(err => console.error(err));
-    console.log(this.updatedUsers)
-  };
+ 
 
-  updateUsers = (userToUpdate) => {
-    console.log(userToUpdate);
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        return axios.put(`${process.env.REACT_APP_SERVER}/users/${userToUpdate._id}`, userToUpdate, config)
-      })
-      .then( userToUpdate => {
-        console.log(userToUpdate.data);
-       const updateUsersArr = this.state.books.map(val => val._id === userToUpdate.data._id ? userToUpdate.data : val)
-        this.setState({ books: updateUsersArr })
-      })
-      .catch(err => console.error(err))
-  };
+ 
+
+ // deleteUsers = async (userToDelete) => {
+  //   console.log('inside the delete function');
+  //   console.log(userToDelete);
+  //   const url = `${process.env.REACT_APP_SERVER}/users/${userToDelete._id}`;
+  //   this.getJwt()
+  //     .then(jwt => {
+  //       const config = {
+  //         headers: { 'Authorization': `Bearer ${jwt}` }
+  //       }
+  //       const updatedUsers = axios.delete(url, config)
+  //       return updatedUsers
+  //     })
+  //     .then(updatedUsers => {
+  //       console.log(this.state.parkName);
+  //       const updatedUsersArr = this.state.parkName.filter(element => element._id !== userToDelete._id)
+  //       this.setState({ parkName: updatedUsersArr })
+  //     })
+  //     .catch(err => console.error(err));
+  //   console.log(this.updatedUsers)
+  // };
+
+  // updateUsers = (userToUpdate) => {
+  //   console.log(userToUpdate);
+  //   this.getJwt()
+  //     .then(jwt => {
+  //       const config = {
+  //         headers: { 'Authorization': `Bearer ${jwt}` }
+  //       }
+  //       return axios.put(`${process.env.REACT_APP_SERVER}/users/${userToUpdate._id}`, userToUpdate, config)
+  //     })
+  //     .then( userToUpdate => {
+  //       console.log(userToUpdate.data);
+  //      const updateUsersArr = this.state.books.map(val => val._id === userToUpdate.data._id ? userToUpdate.data : val)
+  //       this.setState({ books: updateUsersArr })
+  //     })
+  //     .catch(err => console.error(err))
+  // };
 
 
 
@@ -289,7 +282,7 @@ render() {
         <Modal.Body>
           <Form onSubmit={this.handleExplore}>
             <Form.Group className="mb-3">
-              <Form.Label>Enter a city name or zipcode</Form.Label>
+              <Form.Label>Enter a city name or state</Form.Label>
               <Form.Control type="text" onChange={this.handleInput} />
             </Form.Group>
             <Button
@@ -304,7 +297,7 @@ render() {
       </Modal>
 
       {this.state.displayInfo && (
-        <Container>
+        <Container className="mainPage">
 
           <NationalPark
             handleInput={this.handleInput}
@@ -318,6 +311,7 @@ render() {
             displayInfo={this.state.displayInfo}
             yelpData={this.state.yelpData}
             city = {this.state.city}
+           parks = {this.state.parks}
             />
 
           <Weather 
@@ -329,7 +323,7 @@ render() {
 
       )}
       {/* Should we comment this? */}
-      {this.state.errorIn && <p>Error: City not found.</p>}
+      {/* {this.state.errorIn && <p>Error: City not found.</p>} */}
     </>
   );
 }

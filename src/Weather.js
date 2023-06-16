@@ -2,6 +2,8 @@ import React from "react";
 import Card from 'react-bootstrap/Card';
 // import CardHeader from 'react-bootstrap/CardHeader'
 import CardGroup from 'react-bootstrap/CardGroup';
+// import CardImg from 'react-bootstrap/CardImg'
+
 class Weather extends React.Component {
 
   render() {
