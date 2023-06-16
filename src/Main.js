@@ -23,6 +23,7 @@ class Main extends React.Component {
       locationData: [],
       weatherData: [],
       yelpData: [],
+      // parks: {},
     };
     this.resetStates = this.resetStates.bind(this);
   }
@@ -34,17 +35,17 @@ class Main extends React.Component {
       .catch(err => console.error(err))
   }
 
-  pullUsers = () => {
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        return axios.get(`${process.env.REACT_APP_SERVER}/users`, config);
-      })
-      .then(response => this.setState({ parkName: response.data }))
-      .catch(err => console.error(err));
-  }
+  // pullUsers = () => {
+  //   this.getJwt()
+  //     .then(jwt => {
+  //       const config = {
+  //         headers: { 'Authorization': `Bearer ${jwt}` }
+  //       }
+  //       return axios.get(`${process.env.REACT_APP_SERVER}/users`, config);
+  //     })
+  //     .then(response => this.setState({ parkName: response.data }))
+  //     .catch(err => console.error(err));
+  // }
 
  
 
@@ -71,22 +72,22 @@ class Main extends React.Component {
   //   console.log(this.updatedUsers)
   // };
 
-  updateUsers = (userToUpdate) => {
-    console.log(userToUpdate);
-    this.getJwt()
-      .then(jwt => {
-        const config = {
-          headers: { 'Authorization': `Bearer ${jwt}` }
-        }
-        return axios.put(`${process.env.REACT_APP_SERVER}/users/${userToUpdate._id}`, userToUpdate, config)
-      })
-      .then( userToUpdate => {
-        console.log(userToUpdate.data);
-       const updateUsersArr = this.state.books.map(val => val._id === userToUpdate.data._id ? userToUpdate.data : val)
-        this.setState({ books: updateUsersArr })
-      })
-      .catch(err => console.error(err))
-  };
+  // updateUsers = (userToUpdate) => {
+  //   console.log(userToUpdate);
+  //   this.getJwt()
+  //     .then(jwt => {
+  //       const config = {
+  //         headers: { 'Authorization': `Bearer ${jwt}` }
+  //       }
+  //       return axios.put(`${process.env.REACT_APP_SERVER}/users/${userToUpdate._id}`, userToUpdate, config)
+  //     })
+  //     .then( userToUpdate => {
+  //       console.log(userToUpdate.data);
+  //      const updateUsersArr = this.state.books.map(val => val._id === userToUpdate.data._id ? userToUpdate.data : val)
+  //       this.setState({ books: updateUsersArr })
+  //     })
+  //     .catch(err => console.error(err))
+  // };
 
 
 
@@ -310,7 +311,7 @@ render() {
             displayInfo={this.state.displayInfo}
             yelpData={this.state.yelpData}
             city = {this.state.city}
-           
+           parks = {this.state.parks}
             />
 
           <Weather 

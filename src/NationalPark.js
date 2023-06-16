@@ -13,7 +13,16 @@ class NationalPark extends React.Component {
       isParkAdded: -1,
       parks: {},
     };
+    this.resetStates = this.resetStates.bind(this);
   }
+
+  resetStates = () => {
+    this.setState({
+      displayInfo: false,
+      errorIn: false,
+    });
+  };
+
   renderYelpData(yelpData) {
     if (!yelpData) {
       return <p>No Yelp reviews available</p>;
@@ -74,29 +83,19 @@ class NationalPark extends React.Component {
       .catch((err) => console.error(err));
   };
 
-  // deleteUsers = async (parkToDelete) => {
-  //   console.log("inside the delete function");
-  //   console.log(parkToDelete);
-  //   const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete}`;
-  //   this.getJwt()
-  //     .then((jwt) => {
-  //       const config = {
-  //         headers: { Authorization: `Bearer ${jwt}` },
-  //       };
-  //       const updatedUsers = axios.delete(url, config);
-  //       return updatedUsers;
-  //     })
-  //     .then((updatedUsers) => {
-  //       console.log(this.state.parks);
-  //       const updatedUsersArr = this.state.parks.filter(
-  //         (element) => element._id !== parkToDelete._id
-  //       );
-  //       this.setState({ parks: updatedUsersArr });
-  //     })
-  //     .catch((err) => console.error(err));
-  //   console.log(this.updatedUsers);
-  // };
-
+  handleDelete = (parkId) => {
+    this.deleteUsers(parkId)
+      .then(() => {
+        const updatedParks = { ...this.state.parks };
+        delete updatedParks[parkId];
+        this.setState({ parks: updatedParks });
+        console.log(this.state.parks);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  
   deleteUsers = async (parkToDelete) => {
     try {
       console.log("inside the delete function");
@@ -107,18 +106,33 @@ class NationalPark extends React.Component {
         headers: { Authorization: `Bearer ${jwt}` },
       };
       await axios.delete(url, config);
-  
-      // Create a copy of the parks object in the state
-      const updatedParks = { ...this.state.parks };
-      // Delete the property representing the park to be removed
-      delete updatedParks[parkToDelete];
-      this.setState({ parks: updatedParks });
-  
-      console.log(this.state.parks);
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   };
+
+  // deleteUsers = async (parkToDelete) => {
+  //   try {
+  //     console.log("inside the delete function");
+  //     console.log(parkToDelete);
+  //     const url = `${process.env.REACT_APP_SERVER}/users/${parkToDelete}`;
+  //     const jwt = await this.getJwt();
+  //     const config = {
+  //       headers: { Authorization: `Bearer ${jwt}` },
+  //     };
+  //     await axios.delete(url, config);
+  
+  //     // Create a copy of the parks object in the state
+  //     const updatedParks = { ...this.state.parks };
+  //     // Delete the property representing the park to be removed
+  //     delete updatedParks[parkToDelete];
+  //     this.setState({ parks: updatedParks }, () => {
+  //       console.log(this.state.parks);
+  //     });
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   // deleteUsers = async (parkToDelete) => {
   //   console.log("inside the delete function");
@@ -227,13 +241,14 @@ class NationalPark extends React.Component {
         {/* <Profile delPark = {this.deleteUsers} /> */}
         <div>
         <h4>The Favorite parks of your choice</h4>
-      <Accordion>
+       
+      <Accordion >
         {Object.keys(this.state.parks).map((key) => (
           <Accordion.Item key={key}>
             <Accordion.Header>{this.state.parks[key].parkName}</Accordion.Header>
             <Accordion.Body>
               <ol>
-              <Button onClick={() => this.deleteUsers(this.state.parks[key]._id)}>
+              <Button onClick={() => this.handleDelete(this.state.parks[key]._id)} >
               Delete from the favorite
             </Button>
               </ol>
@@ -241,6 +256,7 @@ class NationalPark extends React.Component {
           </Accordion.Item>
         ))}
       </Accordion>
+      
         </div>
       </>
     );
