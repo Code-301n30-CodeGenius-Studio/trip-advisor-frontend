@@ -197,7 +197,9 @@ class Main extends React.Component {
           yelpData: yelpData,
           displayInfo: true,
           errorIn: false,
-        }, () => console.log(this.state.yelpData));
+        }, 
+        () => this.fetchWeatherData()
+        );
       } else {
         this.setState({
           yelpData: [],
