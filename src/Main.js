@@ -296,7 +296,7 @@ render() {
         </Modal.Body>
       </Modal>
 
-      {this.state.displayInfo && (
+      {/* {this.state.displayInfo && ( */}
         <Container className="mainPage">
 
           <NationalPark
@@ -321,7 +321,7 @@ render() {
 
         </Container>
 
-      )}
+      {/* )} */}
       {/* Should we comment this? */}
       {/* {this.state.errorIn && <p>Error: City not found.</p>} */}
     </>
