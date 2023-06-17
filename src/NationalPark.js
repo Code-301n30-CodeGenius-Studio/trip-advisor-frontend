@@ -30,8 +30,8 @@ class NationalPark extends React.Component {
 
     return yelpData.map((review, idx) => (
       <div key={idx}>
-        <p>Rating: {review.rating || "No ratings available"}</p>
-        <p>Text: {review.text || ""}</p>
+        <p>Rating: {review.rating || "No Yelp ratings available"}</p>
+        <p>Text: {review.text|| ""}</p>
       </div>
     ));
   }
@@ -175,11 +175,12 @@ class NationalPark extends React.Component {
                         Click Here to see the direction
                       </a>
 
-                      {/* <img
+                      <img
                       className="national_park"
                       alt={elements.name}
                       src={elements.image}
-                    /> */}
+                    />
+
 
                       <p className="selectedCity">Standard Hours:</p>
 
