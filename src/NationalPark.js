@@ -154,11 +154,12 @@ class NationalPark extends React.Component {
     return (
       <>
         <div>
+
+          {this.props.displayInfo && (
+            <>
           <p className="selectedCity">
             This is your selected city: {this.props.city}
           </p>
-
-          {this.props.displayInfo && (
             <Accordion className="allInfo" defaultActiveKey="0">
               {this.props.thisIsArrOfNationalPark.map((elements, idx) => (
                 <Accordion.Item eventKey={idx} key={idx}>
@@ -175,11 +176,11 @@ class NationalPark extends React.Component {
                         Click Here to see the direction
                       </a>
 
-                      <img
+                      {/* <img
                       className="national_park"
                       alt={elements.name}
                       src={elements.image}
-                    />
+                    /> */}
 
 
                       <p className="selectedCity">Standard Hours:</p>
@@ -210,6 +211,7 @@ class NationalPark extends React.Component {
                 </Accordion.Item>
               ))}
             </Accordion>
+            </>
           )}
    
         </div>
@@ -217,9 +219,9 @@ class NationalPark extends React.Component {
         <div>
         <h4 className="favPark">The Favorite parks of your choice</h4>
        
-      <Accordion >
+      <Accordion defaultActiveKey="0" >
         {Object.keys(this.state.parks).map((key) => (
-          <Accordion.Item key={key}>
+          <Accordion.Item eventKey={key} key={key}>
             <Accordion.Header>{this.state.parks[key].parkName}</Accordion.Header>
             <Accordion.Body>
               <ol>
