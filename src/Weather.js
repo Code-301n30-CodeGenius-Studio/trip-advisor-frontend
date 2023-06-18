@@ -17,10 +17,10 @@ class Weather extends React.Component {
           key = {idx}
           className="weather"
           >
-            <Card.Img
+            {/* <Card.Img
             src={require(`./img/icons/${elements.weatherIcon}.png`)}
             alt={elements.forecast}
-             />
+             /> */}
             <Card.Title>{elements.time}</Card.Title>
             <Card.Text>{elements.forecast}</Card.Text>
           </Card>
